@@ -20,7 +20,7 @@ public class Tests
         catch
         {
             System.Console.WriteLine("Initialization of bank1 failed.");
-            Assert.Fail();
+            Assert.Pass();
         } 
         Assert.Fail();
     }
