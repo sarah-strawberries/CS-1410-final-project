@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using PersonalFinanceManager;
 
 namespace FinanceManager.Tests;
 
@@ -16,10 +17,10 @@ public class Tests
         {
             Bank bank1 = new Bank (" .      ", 567);
         }
-        catch(ValueNotAllowedException)
+        catch
         {
-            Console.WriteLine("Initialization of bank1 failed");
-            Assert.Pass();
+            System.Console.WriteLine("Initialization of bank1 failed.");
+            Assert.Fail();
         } 
         Assert.Fail();
     }

@@ -17,6 +17,7 @@ namespace PersonalFinanceManager
             }
             name = bankName;
             
+            
             if (Convert.ToString(routingNum).Length != 9)
             {
                 throw new ValueNotAllowedException("Routing number must be 9 digits.");

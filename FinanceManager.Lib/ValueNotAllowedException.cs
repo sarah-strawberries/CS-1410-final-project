@@ -1,7 +1,7 @@
 using System.Runtime.Serialization;
 
 [Serializable]
-internal class ValueNotAllowedException : Exception
+public class ValueNotAllowedException : Exception
 {
     public ValueNotAllowedException()
     {
