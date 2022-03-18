@@ -2,6 +2,7 @@ namespace PersonalFinanceManager
 {
     public class Bank
     {
+        private static Dictionary<int, Account> Accounts = new Dictionary<int, Account>();
         private string name;
         private int routingNumber;
         
@@ -15,7 +16,7 @@ namespace PersonalFinanceManager
             {
                 throw new ValueNotAllowedException("Bank name must not be a blank field and also must contain more than one character, excluding spaces.");
             }
-            name = bankName;
+            name = bankName.Trim();
             
             
             if (Convert.ToString(routingNum).Length != 9)
@@ -25,5 +26,9 @@ namespace PersonalFinanceManager
             routingNumber = routingNum;
         }
 
+        public string GetBankInfo()
+        {
+            return String.Format($"Bank Name: {0} \n \n Routing Number: {1}", Name, RoutingNumber);
+        }
     }
 }
