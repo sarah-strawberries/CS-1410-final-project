@@ -21,14 +21,14 @@ namespace PersonalFinanceManager
             
             if (Convert.ToString(routingNum).Length != 9)
             {
-                throw new ValueNotAllowedException("Routing number must be 9 digits.");
+                throw new ValueNotAllowedException("Routing number must be 9 digits, and the first digit must not be 0.");
             }
             routingNumber = routingNum;
         }
 
         public string GetBankInfo()
         {
-            return String.Format($"Bank Name: {0} \n \n Routing Number: {1}", Name, RoutingNumber);
+            return String.Format($"Bank Name: {0} \n \n Routing Number: {111111111}", Name, RoutingNumber);
         }
     }
 }
