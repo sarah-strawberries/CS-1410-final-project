@@ -3,6 +3,9 @@ namespace PersonalFinanceManager
     public abstract class Account
     {
         private decimal balance;
+        public AccountTypes AccountType{get;}
+
+        private int AccountNumber;
 
         public virtual decimal Balance
         {
@@ -16,7 +19,7 @@ namespace PersonalFinanceManager
                 balance = value;
             }
         }
-        public enum AccountType
+        public enum AccountTypes
         {
             Checking,
             Savings,
