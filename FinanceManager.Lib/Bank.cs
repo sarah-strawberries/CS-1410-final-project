@@ -28,7 +28,7 @@ namespace PersonalFinanceManager
 
         public string GetBankInfo()
         {
-            return String.Format($"Bank Name: {0} \n \n Routing Number: {111111111}", Name, RoutingNumber);
+            return String.Format($"Bank Name: {Name} \n \n Routing Number: {RoutingNumber}");
         }
     }
 }

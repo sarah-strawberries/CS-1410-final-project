@@ -29,6 +29,6 @@ public class Tests
     public void GetBankInfoTest()
     {
         Bank bank1 = new Bank("My First Bank", 100345678);
-        Assert.AreEqual("Bank Name: My First Bank \n \n Routing Number: 000345678", bank1.GetBankInfo());
+        Assert.AreEqual("Bank Name: My First Bank \n \n Routing Number: 100345678", bank1.GetBankInfo());
     }
 }
