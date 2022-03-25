@@ -1,6 +1,6 @@
 namespace PersonalFinanceManager
 {
-    public class Bank
+    public class Bank : IHasDictionaryList
     {
         private Dictionary<int, Account> accountList = new Dictionary<int, Account>();
         private string name;
@@ -43,25 +43,22 @@ namespace PersonalFinanceManager
             // Each instance of Bank contains a private Dictionary<int, Account> that uses an account 
             //   number to access the value, which is a reference to an object of type Account.
 
-               for (count = 0, /*some code to iterate through the Account references in thisBank.Accounts */ count++)
-               {
-                   /* some code to set the string variable accountListAsString to equal its current value 
-                      plus an additional string (the last 4 digits of the current key plus the value
-                      of a variable inside the Account referenced to in the value position)
-                   */
-               }
+            //    for (count = 0, /*some code to iterate through the Accounts in thisBank.Accounts */ count++)
+            //    {
+            //        // update the accountListAsString variable
+            //    }
                return "This method has not been coded yet"; //delete this line after method is complete
 
                /* The final return value should be a string with the last 4 digits of the account number 
-                  (the account number is the key in the Accounts Dictionary) and the account type for each 
-                  Account in the referenced Bank object. Each account's info ( acct. number/account type)
-                  should be listed on its own line (using \n to add a new line inside the string after 
-                  adding each account number and account type).
+                  (the account number is the key in the Accounts Dictionary), followed by the account type 
+                  and the account holder's name for each Account in the referenced Bank object. Each account's 
+                  info (acct. number/account type/holder name) should be listed on its own line (using \n to 
+                  add a new line inside the string after each account holder's name).
 
                   Example of what this might look like:
 
-                  XXXXX5896 :  \n
-                  XXXXX3869 : Savings account
+                  XXXXX5896 : Checking account, John Doe
+                  XXXXX3869 : Savings account, Jane Doe
                */
         }
 

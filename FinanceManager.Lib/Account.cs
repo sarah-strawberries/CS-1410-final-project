@@ -1,10 +1,10 @@
 namespace PersonalFinanceManager
 {
-    public abstract class Account
+    public class Account
     {
         private decimal balance;
 
-        private int AccountNumber;
+        private int accountNumber;
 
         public virtual decimal Balance
         {
