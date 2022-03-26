@@ -1,15 +1,17 @@
 namespace PersonalFinanceManager
 {
-    public class Account
+    public class Account : IAccount
     {
         private decimal balance;
 
         private int accountNumber;
+        private string holderName;
+        public string HolderName{get; private set;}
 
         public virtual decimal Balance
         {
             get => balance;
-            set
+            private set
             {
                 // if (balance + value < 0)
                 // {

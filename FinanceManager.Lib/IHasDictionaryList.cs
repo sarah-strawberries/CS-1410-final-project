@@ -1,3 +1,4 @@
+//change this interface to a static class of extension methods
 public interface IHasDictionaryList
 {
     static string dictionaryListAsString;

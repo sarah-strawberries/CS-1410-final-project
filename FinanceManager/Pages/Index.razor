@@ -2,18 +2,54 @@
 
 <PageTitle>Home</PageTitle>
 
+@using PersonalFinanceManager;
 <h1>Home</h1>
 
-Welcome to your finance manager. </br>
-Click the "Transactions" button to go to the page where you will eventually be able to add a transaction. </br>
-Click the "Transaction History" button to go to the page where you will eventually be able to view your past transactions.
+<b>Welcome to your finance manager!</b>
+<br><br>Click the <b>"Transactions"</b> button to go to the page where you will eventually be able to add a transaction.
+<br><br>Click the <b>"Transaction History"</b> button to go to the page where you will eventually be able to view your past
+transactions.
+<br> <br>
+Fill in the fields below with the name of a bank and with a 9-digit routing number to add a bank.
+<br> <i>(Hint: the bank name should be a minimum of 2 characters, and the routing number should not start with 0.) </i>
+<br>
+
+<label>
+    <input @bind=bankNameInput />
+</label>
+<input @bind=routingNumInput />
+<button @onclick=addBank>Add a Bank</button>
 
 @code
 {
-    public static void Main()
+    string bankNameInput = "[bank name here]";
+    public int routingNumInput;
+    int RoutingNumber;
+    string BankName = "[Unnamed]";
+    public void addBank()
     {
-        
-        
+        try
+        {
+            Bank newBank = new Bank(bankNameInput, routingNumInput);
+            RoutingNumber = routingNumInput;
+            BankName = bankNameInput;
+            ValueNotAllowedException.errorMessage = null;
+        }
+        catch (ValueNotAllowedException)
+        {
+            
+        }
+        bankNameInput = "";
+        routingNumInput = 0;
     }
-
 }
+
+@if (ValueNotAllowedException.errorMessage != null)
+{
+    <p>ERROR: @ValueNotAllowedException.errorMessage</p>
+}
+
+<br>
+<br>
+<h1>My Bank: @BankName</h1>
+<h4>Routing number: @RoutingNumber</h4>

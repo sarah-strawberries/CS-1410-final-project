@@ -17,9 +17,9 @@ namespace PersonalFinanceManager
         public Bank(string bankName, int routingNum)
         {
 
-            if (bankName.Trim().Length <= 1)
+            if (bankName.Trim().Length <= 1 || bankName == null)
             {
-                throw new ValueNotAllowedException("Bank name must not be a blank field and also must contain more than one character, excluding spaces.");
+                throw new ValueNotAllowedException("Bank name must not be a blank field and also must contain more than one character.");
             }
             name = bankName.Trim();
             

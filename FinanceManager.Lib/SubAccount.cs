@@ -1,12 +1,14 @@
-public class SubAccount
+namespace PersonalFinanceManager
 {
-    public AccountTypes AccountType { get; }
-
-    public enum AccountTypes
+    public class SubAccount : Account, IAccount
     {
-        Checking,
-        Savings,
-        MoneyMarket
-    }
+        public AccountTypes AccountType { get; }
+        public enum AccountTypes
+        {
+            Checking,
+            Savings,
+            MoneyMarket
+        }
 
+    }
 }
