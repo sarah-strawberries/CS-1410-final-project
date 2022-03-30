@@ -1,12 +1,12 @@
 namespace PersonalFinanceManager
 {
-    public class Bank : IHasDictionaryList
+    public class Bank 
     {
         private Dictionary<int, Account> accountList = new Dictionary<int, Account>();
         private string name;
         private int routingNumber;
 
-    #region StuffForGettingAccountsList
+    #region StuffForGettingAccountList
         private static string accountListAsString;
         private static int count;
     #endregion
@@ -43,10 +43,15 @@ namespace PersonalFinanceManager
             // Each instance of Bank contains a private Dictionary<int, Account> that uses an account 
             //   number to access the value, which is a reference to an object of type Account.
 
-            //    for (count = 0, /*some code to iterate through the Accounts in thisBank.Accounts */ count++)
-            //    {
-            //        // update the accountListAsString variable
-            //    }
+               foreach (KeyValuePair<int, Account> entry in thisBank.accountList)
+               {
+                   // update the accountListAsString variable
+                   if (accountListAsString == null)
+                   {
+                       accountListAsString = $"   Accounts in {thisBank.Name}: \nXXXXX{(entry.Key.ToString()).Substring(4,4)} : {entry.Value}, {entry.Value.HolderName}";
+                   }
+
+               }
                return "This method has not been coded yet"; //delete this line after method is complete
 
                /* The final return value should be a string with the last 4 digits of the account number 
@@ -57,8 +62,8 @@ namespace PersonalFinanceManager
 
                   Example of what this might look like:
 
-                  XXXXX5896 : Checking account, John Doe
-                  XXXXX3869 : Savings account, Jane Doe
+                  XXXXX5896 : John Doe
+                  XXXXX3869 : Jane Doe
                */
         }
 
@@ -69,3 +74,6 @@ namespace PersonalFinanceManager
         // }
     }
 }
+
+
+//override ToString()?
