@@ -1,0 +1,14 @@
+Add the ability to save banks and accounts to a file
+
+Add the ability to add a transaction
+    Have the option to click a button that says "Today" to automatically fill 
+    in today's date in the date field
+
+
+Add the ability to save transaction history
+
+
+Easier stuff:
+Add a button that allows you to copy the bank routing number to your clipboard
+ (see https://chrissainty.com/copy-to-clipboard-in-blazor/)
+

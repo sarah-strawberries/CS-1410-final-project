@@ -36,8 +36,8 @@ namespace PersonalFinanceManager
             {
                 throw new ValueNotAllowedException("Bank name must not be a blank field and also must contain more than one character.");
             }
-            else if (bankDictionary.Contains <> bankName.Trim())
-                name = bankName.Trim();
+            // else if (bankDictionary.Contains(KeyValuePair<bankName.Trim(),Bank thisBank>) )
+            //     name = bankName.Trim();
 
 
             if (Convert.ToString(routingNum).Length != 9)
