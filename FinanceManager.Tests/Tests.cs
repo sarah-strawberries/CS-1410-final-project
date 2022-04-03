@@ -85,6 +85,15 @@ public class Tests
 
 
     #region BankTests
+    [Test]
+    public void TestAddBanksToBankDictionary()
+    {
+        Bank bank1 = new Bank("Amazing Bank", 235678910);
+        Bank bank2 = new Bank("Average Bank", 987654321);
+        Bank retrievedBank1 = Bank.GetBank("Amazing Bank");
+        Bank retrievedBank2 = Bank.GetBank("Average Bank");
+    }
+
 
     [Test]
     public void TestBankNameException()
@@ -114,8 +123,11 @@ public class Tests
     public void TestGetListOfAccountsInBank()
     {
         Bank bank1 = new Bank("Empty Bank", 100345777);
+        Bank bank2 = new Bank("Non-empty Bank", 233344445);
+        Bank.AddAccountToBank(bank2, "Bobby Solofsky", 77888999);
 
-        Assert.AreEqual(null, Bank.GetAccountListFor(bank1));
+        Assert.AreEqual("No accounts to display.", Bank.GetAccountListFor(bank1));
+        Assert.AreEqual($"   Accounts in Non-empty Bank: \nXXXXX999 : Bobby Solofsky\n", Bank.GetAccountListFor(bank2));
     }
 
     [Test]

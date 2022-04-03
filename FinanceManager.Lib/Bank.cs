@@ -11,21 +11,22 @@ namespace PersonalFinanceManager
         private static string listOfAccountsAsString;
         public string Name { get => name; }
         public int RoutingNumber { get => routingNumber; }
-        
+
 
         // ---------- METHODS ----------
 
         /// <summary> Returns a string value with one account per line containing all the accounts in this Bank's accountDictionary for the purpose of showing to the user </summary>
         public static string GetAccountListFor(Bank thisBank)
         {
-            if (listOfAccountsAsString == null)
+            if (thisBank.accountDictionary.Count() == 0)
             {
-                return null;
+                return "No accounts to display.";
             }
+            listOfAccountsAsString = "";
             listOfAccountsAsString = $"   Accounts in {thisBank.Name}: \n";
             foreach (KeyValuePair<long, Account> entry in thisBank.accountDictionary)
             {
-                listOfAccountsAsString += $"XXXXX{(entry.Key.ToString()).Substring(4, 4)} : {entry.Value}, {entry.Value.ItemKey}\n";
+                listOfAccountsAsString += $"XXXXX{(entry.Key.ToString()).Substring(5, 3)} : {entry.Value.HolderName}\n";
                 // updates the accountListAsString variable
             }
 
@@ -43,6 +44,11 @@ namespace PersonalFinanceManager
             return this.accountDictionary[accountNum];
             // Add some code to make it return an error if the account number is bad
         }
+        public static Bank GetBank(string bankName)
+        {
+            return Bank.bankDictionary[bankName];
+            // add code to constrain this
+        }
 
         public string GetBankInfo()
         {
@@ -59,7 +65,7 @@ namespace PersonalFinanceManager
                 throw new ValueNotAllowedException("Bank name must not be a blank field and also must contain more than one character.");
             }
             // else if (bankDictionary.Contains(KeyValuePair<bankName.Trim(),Bank thisBank>) )
-                name = bankName.Trim();
+            name = bankName.Trim();
 
 
             if (Convert.ToString(routingNum).Length != 9)
