@@ -122,10 +122,10 @@ public class Tests
     public void TestAddAccountToBank()
     {
         Bank newBank = new Bank("Mountain America Credit Union", 324079555);
-        Account newAccount = new Account("Mickey Mouse", 12345678);
-        Bank.AddAccountToBank(newBank, newAccount);
+        Bank.AddAccountToBank(newBank,"Mickey Mouse", 12345678);
+        Account retrievedAccount = newBank.GetAccount(12345678);
 
-        Assert.AreEqual(newAccount, newBank.GetAccount(123456789));
+        Assert.AreEqual("Mickey Mouse", retrievedAccount.HolderName);
     }
 
     #endregion BankTests

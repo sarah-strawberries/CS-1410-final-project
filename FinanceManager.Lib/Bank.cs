@@ -32,9 +32,10 @@ namespace PersonalFinanceManager
             return listOfAccountsAsString;
         }
 
-        public static void AddAccountToBank(Bank thisBank, Account thisAccount)
+        public static void AddAccountToBank(Bank thisBank, string holderName, long accountNum)
         {
-            thisBank.accountDictionary.Add(thisAccount.AccountNumber, thisAccount);
+            Account acct = new Account(holderName, accountNum);
+            thisBank.accountDictionary.Add(accountNum, acct);
         }
 
         public Account GetAccount(long accountNum)
