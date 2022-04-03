@@ -1,7 +1,6 @@
 using System.IO;
 namespace PersonalFinanceManager
 {
-    /// <summary> "Account" class contains the following: decimal balance; int accountNumber; string holderName</summary>
     public class Account : ICategorizableAccount, IAccount
     {
         internal decimal balance;
@@ -17,7 +16,6 @@ namespace PersonalFinanceManager
 
         private long accountNumber;
         public long AccountNumber => accountNumber;
-
 
         private string holderName;
         public string HolderName

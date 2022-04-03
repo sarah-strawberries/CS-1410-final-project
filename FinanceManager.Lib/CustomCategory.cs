@@ -5,11 +5,11 @@ namespace PersonalFinanceManager
         public string CategoryName
         {
             get => categoryName;
-            set
-            {
-                categoryName = CategoryName;
-                // Add code to prevent setting categoryName to an empty string
-            }
+            // set
+            // {
+            //     categoryName = value;
+            //     // ...if we change categoryName, it'll also change ItemKey
+            // }
         }
         private decimal balance;
         public decimal Balance

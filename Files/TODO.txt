@@ -16,3 +16,6 @@ Add a button that allows you to copy the bank routing number to your clipboard
 Should I make a reference from each account to its bank, each sub account to its account, 
 and each custom category to its sub account? Just to make it safer so we don't end up 
 losing one somehwere?
+
+
+Add a way to delete custom categories

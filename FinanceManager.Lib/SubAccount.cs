@@ -1,9 +1,5 @@
 namespace PersonalFinanceManager
 {
-    /// <summary>
-    /// "SubAccount" class contains the following variables: 
-    /// decimal balance; int accountNumber; string holderName
-    /// </summary>
     public class SubAccount : ICategorizableAccount, IAccount
     {
         public AccountTypes AccountType { get; }
@@ -38,9 +34,15 @@ namespace PersonalFinanceManager
 
 
         // ---------- VOID METHODS ------------
-        public static void AddCustomCategory(SubAccount thisSubAccount, CustomCategory customCategoryToAdd)
+        public static void AddCustomCategory(SubAccount thisSubAcct, string customCategoryName)
         {
-            thisSubAccount.customCategoryDictionary.Add(customCategoryToAdd.ItemKey, customCategoryToAdd);
+            CustomCategory category = new CustomCategory(customCategoryName);
+            thisSubAcct.customCategoryDictionary.Add(customCategoryName, category);
+        }
+
+        public static CustomCategory GetCustomCategory(SubAccount thisSubAccount, string key)
+        {
+            return thisSubAccount.customCategoryDictionary[key];
         }
 
         // ----------- CONSTRUCTORS ------------
