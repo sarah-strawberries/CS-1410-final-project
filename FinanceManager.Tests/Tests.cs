@@ -29,8 +29,9 @@ public class Tests
         Account myAccount = new Account("Sarah", 12300000);
         SubAccount mySubAccount = new SubAccount(SubAccount.AccountTypes.Savings, myAccount);
         SubAccount.AddCustomCategory(mySubAccount, "College Savings");
+        CustomCategory retrievedCustomCategory = SubAccount.GetCustomCategory(mySubAccount, "College Savings");
 
-        Assert.AreEqual("College Savings", SubAccount.GetCustomCategory(mySubAccount, "College Savings"));
+        Assert.AreEqual("College Savings", retrievedCustomCategory.CategoryName);
     }
     #endregion
 
@@ -57,7 +58,7 @@ public class Tests
         catch
         {
             System.Console.WriteLine("Initialization of accountWithBadAcctNum failed.");
-            
+
             Assert.Pass();
         }
     }
@@ -73,7 +74,7 @@ public class Tests
     {
         Account mainAccount = new Account("Jimminy Cricket", 21435984);
         SubAccount jimminyCricketSubAccount = new SubAccount(SubAccount.AccountTypes.Checking, mainAccount);
-        
+
         Assert.AreEqual(mainAccount, jimminyCricketSubAccount.BaseAccount);
         Assert.AreEqual("Checking", jimminyCricketSubAccount.AccountType.ToString());
         Assert.AreEqual(2143598401, jimminyCricketSubAccount.AccountNumber);
@@ -95,7 +96,7 @@ public class Tests
         catch
         {
             System.Console.WriteLine("Initialization of bank1 failed.");
-            
+
             Assert.Pass();
         }
         Assert.Fail();
@@ -105,7 +106,7 @@ public class Tests
     public void TestGetBankInfo()
     {
         Bank bank1 = new Bank("My First Bank", 100345678);
-        
+
         Assert.AreEqual("Bank Name: My First Bank \n \n Routing Number: 100345678", bank1.GetBankInfo());
     }
 
@@ -113,7 +114,7 @@ public class Tests
     public void TestGetListOfAccountsInBank()
     {
         Bank bank1 = new Bank("Empty Bank", 100345777);
-        
+
         Assert.AreEqual(null, Bank.GetAccountListFor(bank1));
     }
 
@@ -126,5 +127,5 @@ public class Tests
 
     // }
 
-    
+
 }
