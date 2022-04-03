@@ -4,32 +4,52 @@ namespace PersonalFinanceManager
     {
         private static Dictionary<string, Bank> bankDictionary = new Dictionary<string, Bank>();
 
-
-        private Dictionary<int, Account> accountDictionary = new Dictionary<int, Account>();
+        private Dictionary<long, Account> accountDictionary = new Dictionary<long, Account>();
         private string name;
         private int routingNumber;
 
+        private static string listOfAccountsAsString;
+        public string Name { get => name; }
+        public int RoutingNumber { get => routingNumber; }
+        
+
+        // ---------- METHODS ----------
 
         /// <summary> Returns a string value with one account per line containing all the accounts in this Bank's accountDictionary for the purpose of showing to the user </summary>
         public static string GetAccountListFor(Bank thisBank)
         {
-            if (list == null)
+            if (listOfAccountsAsString == null)
             {
                 return null;
             }
-            list = $"   Accounts in {thisBank.Name}: \n";
-            foreach (KeyValuePair<int, Account> entry in thisBank.accountDictionary)
+            listOfAccountsAsString = $"   Accounts in {thisBank.Name}: \n";
+            foreach (KeyValuePair<long, Account> entry in thisBank.accountDictionary)
             {
-                list += $"XXXXX{(entry.Key.ToString()).Substring(4, 4)} : {entry.Value}, {entry.Value.ItemKey}\n";
+                listOfAccountsAsString += $"XXXXX{(entry.Key.ToString()).Substring(4, 4)} : {entry.Value}, {entry.Value.ItemKey}\n";
                 // updates the accountListAsString variable
             }
 
-            return list;
+            return listOfAccountsAsString;
         }
-        private static string list;
-        public string Name { get => name; }
-        public int RoutingNumber { get => routingNumber; }
 
+        public static void AddAccountToBank(Bank thisBank, Account thisAccount)
+        {
+            thisBank.accountDictionary.Add(thisAccount.AccountNumber, thisAccount);
+        }
+
+        public Account GetAccount(long accountNum)
+        {
+            return this.accountDictionary[accountNum];
+            // Add some code to make it return an error if the account number is bad
+        }
+
+        public string GetBankInfo()
+        {
+            return String.Format($"Bank Name: {Name} \n \n Routing Number: {RoutingNumber}");
+        }
+
+
+        // --------- CONSTRUCTORS ----------
         public Bank(string bankName, int routingNum)
         {
             #region ConstrainingCode
@@ -54,38 +74,6 @@ namespace PersonalFinanceManager
 
         }
 
-        public string GetBankInfo()
-        {
-            return String.Format($"Bank Name: {Name} \n \n Routing Number: {RoutingNumber}");
-        }
-
-        // public static string GetAccountListFor(Bank thisBank)
-        // {
-        //     // Each instance of Bank contains a private Dictionary<int, Account> that uses an account 
-        //     //   number to access the value, which is a reference to an object of type Account.
-
-
-        // }
-        //        return "This method has not been coded yet"; //delete this line after method is complete
-
-        //        /* The final return value should be a string with the last 4 digits of the account number 
-        //           (the account number is the key in the Accounts Dictionary), followed by the account type 
-        //           and the account holder's name for each Account in the referenced Bank object. Each account's 
-        //           info (acct. number/account type/holder name) should be listed on its own line (using \n to 
-        //           add a new line inside the string after each account holder's name).
-
-        //           Example of what this might look like:
-
-        //           XXXXX5896 : John Doe
-        //           XXXXX3869 : Jane Doe
-        //        */
-        // }
-
-
-        public static void AddAccountToBank(Bank thisBank, Account thisAccount)
-        {
-
-        }
     }
 }
 

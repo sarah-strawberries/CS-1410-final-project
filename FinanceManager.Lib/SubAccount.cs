@@ -43,6 +43,8 @@ namespace PersonalFinanceManager
         public static CustomCategory GetCustomCategory(SubAccount thisSubAccount, string key)
         {
             return thisSubAccount.customCategoryDictionary[key];
+
+            // Add some code to make it return an error if it has a bad key
         }
 
         // ----------- CONSTRUCTORS ------------

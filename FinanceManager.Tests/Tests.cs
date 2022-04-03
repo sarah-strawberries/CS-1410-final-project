@@ -118,6 +118,15 @@ public class Tests
         Assert.AreEqual(null, Bank.GetAccountListFor(bank1));
     }
 
+    [Test]
+    public void TestAddAccountToBank()
+    {
+        Bank newBank = new Bank("Mountain America Credit Union", 324079555);
+        Account newAccount = new Account("Mickey Mouse", 12345678);
+        Bank.AddAccountToBank(newBank, newAccount);
+
+        Assert.AreEqual(newAccount, newBank.GetAccount(123456789));
+    }
 
     #endregion BankTests
     // [Test]
