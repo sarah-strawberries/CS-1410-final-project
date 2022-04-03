@@ -33,6 +33,19 @@ public class Tests
         Assert.AreEqual(12345678, testAccount.AccountNumber);
     }
 
+    [Test]
+    public void TestAccountNumberException()
+    {
+        try
+        {
+            Account accountWithBadAcctNum = new Account("Mr. Grinch", 01234567);
+        }
+        catch
+        {
+            System.Console.WriteLine("Initialization of accountWithBadAcctNum failed.");
+            Assert.Pass();
+        }
+    }
     // [Test]
     // public void TestCreateSubAccount()
     // {
