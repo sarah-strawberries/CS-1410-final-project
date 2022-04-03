@@ -53,3 +53,16 @@ Fill in the fields below with the name of a bank and with a 9-digit routing numb
 <br>
 <h1>My Bank: @BankName</h1>
 <h4>Routing number: @RoutingNumber</h4>
+
+@code
+{
+    public static void TestFileWriting()
+    {
+        Account testAccount = new Account("Curious George", 54321987);
+        SubAccount testSubAccount = new SubAccount(SubAccount.AccountTypes.Savings, testAccount);
+        Account.AddSubAccount(testAccount, testSubAccount);
+        Account.SaveSubAccountsFor(testAccount);
+    }
+}
+
+<button class="btn btn-primary" @onclick="TestFileWriting">Click me to write to a file!</button>

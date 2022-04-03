@@ -141,11 +141,14 @@ public class Tests
     }
 
     #endregion BankTests
-    // [Test]
-    // public void TestAddAcctToBank()
-    // {
-    //     Bank bank1 = new Bank("Test Bank", 234567899);
 
+    // [Test]
+    // public void TestWriteToFile()
+    // {
+    //     Account testAccount = new Account("Curious George", 54321987);
+    //     SubAccount testSubAccount = new SubAccount(SubAccount.AccountTypes.Savings, testAccount);
+    //     Account.AddSubAccount(testAccount, testSubAccount);
+    //     Account.SaveSubAccountsFor(testAccount);
     // }
 
 

@@ -1,3 +1,6 @@
+1. Make sure I can access items in the dictionaries on each level of the hierarchy
+2. Make sure I can save items
+
 Add the ability to save banks and accounts to a file
 
 Add the ability to add a transaction

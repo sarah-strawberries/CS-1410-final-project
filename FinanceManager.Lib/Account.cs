@@ -41,56 +41,46 @@ namespace PersonalFinanceManager
         // ---------- VOID METHODS ------------
         public static void AddSubAccount(Account thisAccount, SubAccount newSubAccountToAdd)
         {
-            thisAccount.subAccountDictionary.Add("string", newSubAccountToAdd);
+            thisAccount.subAccountDictionary.Add(newSubAccountToAdd.AccountType.ToString(), newSubAccountToAdd);
         }
 
         public static void SaveSubAccountsFor(Account thisAccount)
         {
-            // Need to make bool check for unsaved changes
+            // Note to self:Need to make bool check for unsaved changes
 
-            //if (thisAccount.SubAcctListHasUnsavedChanges)
-            //{
-            if (thisAccount.subAccountDictionary.Count() == 0)
+            if (thisAccount.SubAcctListHasUnsavedChanges)
             {
-                // *output an error that says "No Accounts to Save"*
+                if (thisAccount.subAccountDictionary.Count() == 0)
+                {
+                    // *output an error that says "No Accounts to Save"*
+                }
+
+                StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\SubAccounts.txt");
+
+                foreach (KeyValuePair<string, SubAccount> keyValuePair in thisAccount.subAccountDictionary)
+                {
+                    fileWriter.WriteLine("Account Type:" + keyValuePair.Key);
+                    fileWriter.WriteLine("Account Number:" + keyValuePair.Value.AccountNumber);
+                    fileWriter.WriteLine("Balance:" + keyValuePair.Value.Balance);
+                    fileWriter.WriteLine("End SubAccount");
+
+                }
+                fileWriter.Close();
+                //}
             }
-
-            StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\SubAccounts.txt");
-
-            foreach (KeyValuePair<string, SubAccount> keyValuePair in thisAccount.subAccountDictionary)
-            {
-                fileWriter.WriteLine(keyValuePair.Key);
-
-                // Inherited members of SubAccount:
-                fileWriter.WriteLine("Balance:" + keyValuePair.Value.Balance);
-                fileWriter.WriteLine("AccountNumber:" + keyValuePair.Value.AccountNumber);
-                fileWriter.WriteLine("HolderName:" + keyValuePair.Value.ItemKey);
-
-                // Members belonging to SubAccount:
-                fileWriter.WriteLine("AccountType:" + keyValuePair.Value.AccountType);
-
-            }
-            fileWriter.WriteLine("End of SubAccount list for this Account");
-            fileWriter.Close();
-            //}
-
-            // uncomment the below after making the bool check for unsaved changes
-            // else
-            // {
-            //     // do nothing because changes are already saved
-            // }
         }
 
-        // -------- CONSTRUCTORS ---------
-        public Account(string nameOfHolder, long accountNum)
-        {
-            if (!(accountNum >= 10000000 && accountNum <= 99999999))
+            // -------- CONSTRUCTORS ---------
+
+            public Account(string nameOfHolder, long accountNum)
             {
-                throw new ValueNotAllowedException("ERROR: Account number must be exactly 8 digits and must not have 0 as the first digit.");
+                if (!(accountNum >= 10000000 && accountNum <= 99999999))
+                {
+                    throw new ValueNotAllowedException("ERROR: Account number must be exactly 8 digits and must not have 0 as the first digit.");
+                }
+                accountNumber = accountNum;
+                holderName = nameOfHolder;
+                balance = 0M;
             }
-            accountNumber = accountNum;
-            holderName = nameOfHolder;
-            balance = 0M;
         }
     }
-}
