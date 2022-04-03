@@ -15,11 +15,12 @@ namespace PersonalFinanceManager
         {
             if (list == null)
             {
-                list = $"   Accounts in {thisBank.Name}: \n";
+                return null;
             }
+            list = $"   Accounts in {thisBank.Name}: \n";
             foreach (KeyValuePair<int, Account> entry in thisBank.accountDictionary)
             {
-                list += $"XXXXX{(entry.Key.ToString()).Substring(4, 4)} : {entry.Value}, {entry.Value.HolderName}\n";
+                list += $"XXXXX{(entry.Key.ToString()).Substring(4, 4)} : {entry.Value}, {entry.Value.ItemKey}\n";
                 // updates the accountListAsString variable
             }
 
@@ -31,27 +32,31 @@ namespace PersonalFinanceManager
 
         public Bank(string bankName, int routingNum)
         {
-
+            #region ConstrainingCode
             if (bankName.Trim().Length <= 1 || bankName == null)
             {
                 throw new ValueNotAllowedException("Bank name must not be a blank field and also must contain more than one character.");
             }
             // else if (bankDictionary.Contains(KeyValuePair<bankName.Trim(),Bank thisBank>) )
-            //     name = bankName.Trim();
+                name = bankName.Trim();
 
 
             if (Convert.ToString(routingNum).Length != 9)
             {
                 throw new ValueNotAllowedException("Routing number must be 9 digits, and the first digit must not be 0.");
             }
+            // Need to add something in here to make sure there are no banks with the same name or routing numbers
+
+            #endregion
             routingNumber = routingNum;
 
-            // Need to add something in here to make sure there are no banks with the same name or routing numbers
+            bankDictionary.Add(bankName, this);
+
         }
 
         public string GetBankInfo()
         {
-            return String.Format($"Bank Name: {Name} \n \n Routing Number: {RoutingNumber}");
+            return String.Format("Bank Name: " + Name + $" \n \n Routing Number: {RoutingNumber}");
         }
 
         // public static string GetAccountListFor(Bank thisBank)

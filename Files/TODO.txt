@@ -12,3 +12,7 @@ Easier stuff:
 Add a button that allows you to copy the bank routing number to your clipboard
  (see https://chrissainty.com/copy-to-clipboard-in-blazor/)
 
+
+Should I make a reference from each account to its bank, each sub account to its account, 
+and each custom category to its sub account? Just to make it safer so we don't end up 
+losing one somehwere?

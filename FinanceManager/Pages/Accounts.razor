@@ -1,0 +1,59 @@
+﻿@using PersonalFinanceManager;
+@page "/accounts"
+
+<PageTitle>Accounts</PageTitle>
+
+<h1>Accounts</h1>
+
+<p role="status">Current number of transactions: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me to add a transaction to the transaction count! (Or come back later for more functionality)</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
+
+<label>
+    <input @bind=bankNameInput />
+</label>
+<input @bind=routingNumInput />
+<button @onclick=addBank>Add a Bank</button>
+
+@code
+{
+    string bankNameInput = "[bank name here]";
+    public int routingNumInput;
+    int RoutingNumber;
+    string BankName = "[Unnamed]";
+    public void addBank()
+    {
+        try
+        {
+            Bank newBank = new Bank(bankNameInput, routingNumInput);
+            RoutingNumber = routingNumInput;
+            BankName = bankNameInput;
+            ValueNotAllowedException.errorMessage = null;
+        }
+        catch (ValueNotAllowedException)
+        {
+            
+        }
+        bankNameInput = "";
+        routingNumInput = 0;
+    }
+}
+
+@if (ValueNotAllowedException.errorMessage != null)
+{
+    <p>ERROR: @ValueNotAllowedException.errorMessage</p>
+}
+
+<br>
+<br>
+<h1>My Bank: @BankName</h1>
+<h4>Routing number: @RoutingNumber</h4>

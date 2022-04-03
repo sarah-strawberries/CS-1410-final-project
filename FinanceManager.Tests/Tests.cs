@@ -10,6 +10,18 @@ public class Tests
     {
     }
 
+#region CustomCategoryTests
+    [Test]
+    public void TestCreateCustomCategory()
+    {
+        CustomCategory myCustomCategory = new CustomCategory("Tithing");
+        Assert.AreEqual(0, myCustomCategory.Balance);
+        Assert.AreEqual("Tithing", myCustomCategory.ItemKey);
+    }
+
+    
+#endregion
+
 #region BankTests
 
     [Test]
@@ -46,6 +58,13 @@ public class Tests
     // {
     //     Bank bank1 = new Bank("Test Bank", 234567899);
 
+    // }
+
+    // [Test]
+    // public void TestAddCustomCategoryToDictionary()
+    // {
+    //     CustomCategory myCustomCategory = new CustomCategory("Fun money");
+    //     SubAccount.AddCustomCategory(myCustomCategory);
     // }
 
 #endregion BankTests
