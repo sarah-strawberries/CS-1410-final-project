@@ -2,7 +2,7 @@ namespace PersonalFinanceManager
 {
     public interface IAccount
     {
-        public int AccountNumber{get;}
+        public long AccountNumber{get;}
         
     }
 }

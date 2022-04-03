@@ -46,11 +46,15 @@ public class Tests
             Assert.Pass();
         }
     }
-    // [Test]
-    // public void TestCreateSubAccount()
-    // {
-
-    // }
+    [Test]
+    public void TestCreateSubAccount()
+    {
+        Account mainAccount = new Account("Jimminy Cricket", 21435984);
+        SubAccount jimminyCricketSubAccount = new SubAccount(SubAccount.AccountTypes.Checking, mainAccount);
+        Assert.AreEqual(mainAccount, jimminyCricketSubAccount.BaseAccount);
+        Assert.AreEqual("Checking", jimminyCricketSubAccount.AccountType.ToString());
+        Assert.AreEqual(2143598401, jimminyCricketSubAccount.AccountNumber);
+    }
 
     #endregion
 

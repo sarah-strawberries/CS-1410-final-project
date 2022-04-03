@@ -15,8 +15,8 @@ namespace PersonalFinanceManager
             }
         }
 
-        private int accountNumber;
-        public int AccountNumber => accountNumber;
+        private long accountNumber;
+        public long AccountNumber => accountNumber;
 
 
         private string holderName;
@@ -84,7 +84,7 @@ namespace PersonalFinanceManager
         }
 
         // -------- CONSTRUCTORS ---------
-        public Account(string nameOfHolder, int accountNum)
+        public Account(string nameOfHolder, long accountNum)
         {
             if (!(accountNum >= 10000000 && accountNum <= 99999999))
             {

@@ -21,8 +21,8 @@ namespace PersonalFinanceManager
                 balance = value;
             }
         }
-        private int accountNumber;
-        public int AccountNumber => accountNumber;
+        private long accountNumber;
+        public long AccountNumber => accountNumber;
         public string ItemKey => AccountType.ToString();
         public Account BaseAccount;
         private int numberOfSubAccounts = 0;
@@ -54,7 +54,7 @@ namespace PersonalFinanceManager
             AccountType = type;
             BaseAccount = baseAccount;
             numberOfSubAccounts++;
-            accountNumber = baseAccount.AccountNumber * 10 + numberOfSubAccounts;
+            accountNumber = baseAccount.AccountNumber * 100 + numberOfSubAccounts;
         }
 
     }
