@@ -84,8 +84,13 @@ namespace PersonalFinanceManager
         }
 
         // -------- CONSTRUCTORS ---------
-        public Account(string nameOfHolder, int AccountNumber)
+        public Account(string nameOfHolder, int accountNum)
         {
+            if (!(accountNum >= 10000000 && accountNum <= 99999999))
+            {
+                throw new ValueNotAllowedException("ERROR: Account number must be exactly 8 digits and must not have 0 as the first digit.");
+            }
+            accountNumber = accountNum;
             holderName = nameOfHolder;
             balance = 0M;
         }

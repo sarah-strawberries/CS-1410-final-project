@@ -47,7 +47,7 @@ namespace PersonalFinanceManager
 
         public SubAccount(AccountTypes type, Account baseAccount)
         {
-            if (numberOfSubAccounts == 9)
+            if (numberOfSubAccounts == 99)
             {
                 throw new MaximumReachedException("ERROR: You have reached the maximum number of sub-accounts for this account.");
             }
