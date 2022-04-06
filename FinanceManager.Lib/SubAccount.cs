@@ -21,7 +21,6 @@ namespace PersonalFinanceManager
         public long AccountNumber => accountNumber;
         public string ItemKey => AccountType.ToString();
         public Account BaseAccount;
-        private int numberOfSubAccounts = 0;
 
         private Dictionary<string, CustomCategory> customCategoryDictionary = new Dictionary<string, CustomCategory>();
 
@@ -49,16 +48,22 @@ namespace PersonalFinanceManager
 
         // ----------- CONSTRUCTORS ------------
 
+        /// <summary> **This constructor for testing only** </summary>
+        public SubAccount(AccountTypes type)
+        {
+            AccountType = type;
+            accountNumber = 87654321;
+        }
+
         public SubAccount(AccountTypes type, Account baseAccount)
         {
-            if (numberOfSubAccounts == 99)
+            if (baseAccount.NumberOfSubAccounts == 100)
             {
                 throw new MaximumReachedException("ERROR: You have reached the maximum number of sub-accounts for this account.");
             }
             AccountType = type;
             BaseAccount = baseAccount;
-            numberOfSubAccounts++;
-            accountNumber = baseAccount.AccountNumber * 100 + numberOfSubAccounts;
+            accountNumber = baseAccount.AccountNumber * 100 + baseAccount.NumberOfSubAccounts;
         }
 
     }

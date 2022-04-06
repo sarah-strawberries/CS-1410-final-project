@@ -18,7 +18,9 @@ Add a button that allows you to copy the bank routing number to your clipboard
 
 Should I make a reference from each account to its bank, each sub account to its account, 
 and each custom category to its sub account? Just to make it safer so we don't end up 
-losing one somehwere?
+losing one somewhere?
 
 
 Add a way to delete custom categories
+
+Add a way to upload files https://docs.microsoft.com/en-us/aspnet/core/blazor/file-uploads?view=aspnetcore-6.0&pivots=server

@@ -16,6 +16,8 @@ namespace PersonalFinanceManager
 
         private long accountNumber;
         public long AccountNumber => accountNumber;
+        private Bank homeBank;
+        public Bank HomeBank => homeBank;
 
         private string holderName;
         public string HolderName
@@ -30,6 +32,9 @@ namespace PersonalFinanceManager
         }
 
         public string ItemKey => HolderName;
+        private int numberOfSubAccounts = 0;
+        public int NumberOfSubAccounts => numberOfSubAccounts;
+
 
 
         /// <summary> Please make me check for unsaved changes! </summary>
@@ -41,7 +46,17 @@ namespace PersonalFinanceManager
         // ---------- VOID METHODS ------------
         public static void AddSubAccount(Account thisAccount, SubAccount newSubAccountToAdd)
         {
-            thisAccount.subAccountDictionary.Add(newSubAccountToAdd.AccountType.ToString(), newSubAccountToAdd);
+            thisAccount.numberOfSubAccounts++;
+            try
+            {
+                thisAccount.subAccountDictionary.Add(newSubAccountToAdd.AccountType.ToString(), newSubAccountToAdd);
+            }
+            catch(MaximumReachedException)
+            {
+                //Maximum number of accounts reached...let the user know!
+                thisAccount.numberOfSubAccounts --;
+            }
+
         }
 
         public static void SaveSubAccountsFor(Account thisAccount)
@@ -50,37 +65,45 @@ namespace PersonalFinanceManager
 
             if (thisAccount.SubAcctListHasUnsavedChanges)
             {
-                if (thisAccount.subAccountDictionary.Count() == 0)
-                {
-                    // *output an error that says "No Accounts to Save"*
-                }
 
                 StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\SubAccounts.txt");
 
                 foreach (KeyValuePair<string, SubAccount> keyValuePair in thisAccount.subAccountDictionary)
                 {
-                    fileWriter.WriteLine("Account Type:" + keyValuePair.Key);
                     fileWriter.WriteLine("Account Number:" + keyValuePair.Value.AccountNumber);
+                    fileWriter.WriteLine("Account Type:" + keyValuePair.Key);
                     fileWriter.WriteLine("Balance:" + keyValuePair.Value.Balance);
                     fileWriter.WriteLine("End SubAccount");
 
                 }
                 fileWriter.Close();
-                //}
+
             }
         }
 
-            // -------- CONSTRUCTORS ---------
+        // -------- CONSTRUCTORS ---------
 
-            public Account(string nameOfHolder, long accountNum)
+        /// <summary> **This constructor for testing only** </summary>
+        public Account(string nameOfHolder, long accountNum)
+        {
+            if (!(accountNum >= 10000000 && accountNum <= 99999999))
             {
-                if (!(accountNum >= 10000000 && accountNum <= 99999999))
-                {
-                    throw new ValueNotAllowedException("ERROR: Account number must be exactly 8 digits and must not have 0 as the first digit.");
-                }
-                accountNumber = accountNum;
-                holderName = nameOfHolder;
-                balance = 0M;
+                throw new ValueNotAllowedException("ERROR: Account number must be exactly 8 digits and must not have 0 as the first digit.");
             }
+            accountNumber = accountNum;
+            holderName = nameOfHolder;
+            balance = 0M;
+        }
+        public Account(string nameOfHolder, long accountNum, Bank bank)
+        {
+            if (!(accountNum >= 10000000 && accountNum <= 99999999))
+            {
+                throw new ValueNotAllowedException("ERROR: Account number must be exactly 8 digits and must not have 0 as the first digit.");
+            }
+            homeBank = bank;
+            accountNumber = accountNum;
+            holderName = nameOfHolder;
+            balance = 0M;
         }
     }
+}

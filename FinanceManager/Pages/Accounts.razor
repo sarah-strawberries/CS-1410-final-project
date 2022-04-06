@@ -1,9 +1,10 @@
 ﻿@using PersonalFinanceManager;
 @page "/accounts"
 
-<PageTitle>Accounts</PageTitle>
+<PageTitle>Account Manager</PageTitle>
 
-<h1>Accounts</h1>
+<h1>Account Manager</h1>
+_________________________________________________________________<br><br>
 
 @* <p role="status">Current number of transactions: @currentCount</p>
 
@@ -23,10 +24,10 @@
     <input @bind=bankNameInput />
 </label>
 <input @bind=routingNumInput />
-<button class="btn btn-primary" @onclick=addBank>Click to add bank</button>
-
+<button class="btn btn-primary" @onclick=addBank>Click to add bank</button><br>
+_________________________________________________________________<br>
 @code
-{
+{  
     string bankNameInput = "[bank name here]";
     public int routingNumInput;
     int RoutingNumber;

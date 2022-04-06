@@ -2,11 +2,12 @@ namespace PersonalFinanceManager
 {
     public class Bank
     {
-        private static Dictionary<string, Bank> bankDictionary = new Dictionary<string, Bank>();
+        public static Dictionary<string, Bank> bankDictionary = new Dictionary<string, Bank>();
 
         private Dictionary<long, Account> accountDictionary = new Dictionary<long, Account>();
         private string name;
         private int routingNumber;
+        private bool bankAcctDictHasUnsavedChanges = false;
 
         private static string listOfAccountsAsString;
         public string Name { get => name; }
@@ -29,14 +30,16 @@ namespace PersonalFinanceManager
                 listOfAccountsAsString += $"XXXXX{(entry.Key.ToString()).Substring(5, 3)} : {entry.Value.HolderName}\n";
                 // updates the accountListAsString variable
             }
+            // Still need to test the above method
 
             return listOfAccountsAsString;
         }
 
         public static void AddAccountToBank(Bank thisBank, string holderName, long accountNum)
         {
-            Account acct = new Account(holderName, accountNum);
+            Account acct = new Account(holderName, accountNum, thisBank);
             thisBank.accountDictionary.Add(accountNum, acct);
+            thisBank.bankAcctDictHasUnsavedChanges = true;
         }
 
         public Account GetAccount(long accountNum)
@@ -53,6 +56,28 @@ namespace PersonalFinanceManager
         public string GetBankInfo()
         {
             return String.Format($"Bank Name: {Name} \n \n Routing Number: {RoutingNumber}");
+        }
+
+        public static void SaveAccountsFor(Bank thisBank)
+        {
+            // Note to self:Need to make bool check for unsaved changes
+
+            if (thisBank.bankAcctDictHasUnsavedChanges)
+            {
+            
+                StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\Accounts.txt");
+
+                foreach (KeyValuePair<long, Account> keyValuePair in thisBank.accountDictionary)
+                {
+                    fileWriter.WriteLine("Account Number:" + keyValuePair.Value.AccountNumber);
+                    fileWriter.WriteLine("Balance:" + keyValuePair.Value.Balance);
+                    fileWriter.WriteLine("Bank:" + keyValuePair.Value.HomeBank.Name);
+                    fileWriter.WriteLine("End SubAccount");
+
+                }
+                fileWriter.Close();
+                
+            }
         }
 
 

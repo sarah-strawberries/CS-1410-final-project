@@ -6,7 +6,7 @@
 <h1>Home</h1>
 
 <b>Welcome to your finance manager!</b>
-
+<br>
 Fill in the fields below with the name of a bank and with a 9-digit routing number to add a bank.
 <br> <i>(Hint: the bank name should be a minimum of 2 characters, and the routing number should not start with 0.) </i>
 <br>
@@ -22,7 +22,7 @@ Fill in the fields below with the name of a bank and with a 9-digit routing numb
     string bankNameInput = "[bank name here]";
     public int routingNumInput;
     int RoutingNumber;
-    string BankName = "[Unnamed]";
+    string BankName = "";
     public void addBank()
     {
         try
@@ -62,4 +62,4 @@ Fill in the fields below with the name of a bank and with a 9-digit routing numb
     }
 }
 
-<button class="btn btn-primary" @onclick="TestFileWriting">Click me to write to a file!</button>
+@* <button class="btn btn-primary" @onclick="TestFileWriting">Click me to write to a file!</button> *@
