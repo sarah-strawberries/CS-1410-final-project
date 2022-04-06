@@ -5,9 +5,10 @@
 
 <h1>Accounts</h1>
 
-<p role="status">Current number of transactions: @currentCount</p>
+@* <p role="status">Current number of transactions: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me to add a transaction to the transaction count! (Or come back later for more functionality)</button>
+<button class="btn btn-primary" @onclick="IncrementCount">Click me to add a transaction to the transaction count! (Or
+    come back later for more functionality)</button> *@
 
 @code {
     private int currentCount = 0;
@@ -17,19 +18,23 @@
         currentCount++;
     }
 }
-
+<h4>Add a bank</h4>
 <label>
     <input @bind=bankNameInput />
 </label>
 <input @bind=routingNumInput />
-<button @onclick=addBank>Add a Bank</button>
+<button class="btn btn-primary" @onclick=addBank>Click to add bank</button>
 
 @code
 {
     string bankNameInput = "[bank name here]";
     public int routingNumInput;
     int RoutingNumber;
-    string BankName = "[Unnamed]";
+    string BankName = "";
+
+    string acctNameInput = "";
+    long acctNumInput = 0;
+    
     public void addBank()
     {
         try
@@ -41,10 +46,24 @@
         }
         catch (ValueNotAllowedException)
         {
-            
+
         }
         bankNameInput = "";
         routingNumInput = 0;
+    }
+
+    public void addAccount()
+    {
+        if (BankName != "")
+        {
+            Bank bank = Bank.bankDictionary[BankName];
+            try
+            {
+                
+            }
+            catch
+            { }
+        }
     }
 }
 
@@ -55,5 +74,5 @@
 
 <br>
 <br>
-<h1>My Bank: @BankName</h1>
+<h2>My Bank: @BankName</h2>
 <h4>Routing number: @RoutingNumber</h4>
