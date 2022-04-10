@@ -12,7 +12,7 @@ namespace PersonalFinanceManager
             {
                 if (balance + value < 0)
                 {
-                    throw new ValueNotAllowedException("ERROR: Action failed. This action would leave a deficit in your account.");
+                    throw new ValueNotAllowedException("Action failed. This action would leave a deficit in your account.");
                 }
                 balance = value;
             }

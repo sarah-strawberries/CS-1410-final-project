@@ -41,6 +41,7 @@ namespace PersonalFinanceManager
         public bool SubAcctListHasUnsavedChanges = false;
 
         private Dictionary<string, SubAccount> subAccountDictionary = new Dictionary<string, SubAccount>();
+        private List<Tuple<string, decimal, DateTime>> transactions = new List<Tuple<string, decimal, DateTime>>();
 
 
         // ---------- VOID METHODS ------------
@@ -51,10 +52,10 @@ namespace PersonalFinanceManager
             {
                 thisAccount.subAccountDictionary.Add(newSubAccountToAdd.AccountType.ToString(), newSubAccountToAdd);
             }
-            catch(MaximumReachedException)
+            catch (MaximumReachedException)
             {
                 //Maximum number of accounts reached...let the user know!
-                thisAccount.numberOfSubAccounts --;
+                thisAccount.numberOfSubAccounts--;
             }
 
         }
@@ -80,6 +81,11 @@ namespace PersonalFinanceManager
 
             }
         }
+
+        // public void AddTransaction(Tuple<string, decimal, DateTime> transaction);
+        // {
+        //     this.transactions.Add(transaction);
+        // }
 
         // -------- CONSTRUCTORS ---------
 

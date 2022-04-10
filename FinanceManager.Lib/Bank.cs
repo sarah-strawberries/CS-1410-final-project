@@ -89,7 +89,10 @@ namespace PersonalFinanceManager
             {
                 throw new ValueNotAllowedException("Bank name must not be a blank field and also must contain more than one character.");
             }
-            // else if (bankDictionary.Contains(KeyValuePair<bankName.Trim(),Bank thisBank>) )
+            else if (bankDictionary.ContainsKey(bankName))
+            {
+                throw new ValueNotAllowedException("A bank with that name already exists.");
+            }
             name = bankName.Trim();
 
 

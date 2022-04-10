@@ -24,10 +24,20 @@ _________________________________________________________________<br><br>
     <input @bind=bankNameInput />
 </label>
 <input @bind=routingNumInput />
-<button class="btn btn-primary" @onclick=addBank>Click to add bank</button><br>
-_________________________________________________________________<br>
+<button class="btn btn-primary" @onclick=AddBank>Click to add bank</button><br>
+_________________________________________________________________<br><br>
+
+@* <h4>Add an account</h4>
+<label>
+    <input @bind=bankNameInput />
+</label>
+<input @bind=routingNumInput />
+<button class="btn btn-primary" @onclick=addAccount>Click to add account to bank</button><br> *@
+@* Add code to let the user select the bank to add to *@
+
 @code
 {  
+    // ---- Adding a bank ---
     string bankNameInput = "[bank name here]";
     public int routingNumInput;
     int RoutingNumber;
@@ -36,7 +46,7 @@ _________________________________________________________________<br>
     string acctNameInput = "";
     long acctNumInput = 0;
     
-    public void addBank()
+    public void AddBank()
     {
         try
         {
@@ -47,12 +57,14 @@ _________________________________________________________________<br>
         }
         catch (ValueNotAllowedException)
         {
-
+         
         }
         bankNameInput = "";
         routingNumInput = 0;
     }
 
+    // --- Adding an account ---
+    
     public void addAccount()
     {
         if (BankName != "")
@@ -66,6 +78,17 @@ _________________________________________________________________<br>
             { }
         }
     }
+    // Adding a transaction
+    string memoInput;
+    decimal amountInput;
+    DateTime dateTimeInput;
+
+    public void AddTransaction(Account thisAccount)
+    {
+        Tuple<string, decimal, DateTime> transaction = new Tuple<string, decimal, DateTime>(memoInput, amountInput, dateTimeInput);
+    }
+
+
 }
 
 @if (ValueNotAllowedException.errorMessage != null)

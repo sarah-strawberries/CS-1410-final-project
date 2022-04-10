@@ -1,6 +1,8 @@
 1. Make sure I can access items in the dictionaries on each level of the hierarchy
 2. Make sure I can save items
 
+Let the user choose which bank to add an account to
+
 Add the ability to save banks and accounts to a file
 
 Add the ability to add a transaction
