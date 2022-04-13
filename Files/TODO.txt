@@ -26,3 +26,6 @@ losing one somewhere?
 Add a way to delete custom categories
 
 Add a way to upload files https://docs.microsoft.com/en-us/aspnet/core/blazor/file-uploads?view=aspnetcore-6.0&pivots=server
+
+
+Use AddRange() to add a bunch of stuff at once

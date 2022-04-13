@@ -3,16 +3,13 @@ using PersonalFinanceManager;
 
 namespace FinanceManager.Tests;
 
-public class Tests
+public class CustomCategoryTests
 {
     [SetUp]
     public void Setup()
     {
     }
 
-
-
-    #region CustomCategoryTests
 
     [Test]
     public void TestCreateCustomCategory()
@@ -33,11 +30,14 @@ public class Tests
 
         Assert.AreEqual("College Savings", retrievedCustomCategory.CategoryName);
     }
-    #endregion
+}
 
-
-
-    #region AccountTests
+public class AccountTests
+{
+    [SetUp]
+    public void Setup()
+    {
+    }
 
     [Test]
     public void TestCreateAccount()
@@ -62,12 +62,14 @@ public class Tests
             Assert.Pass();
         }
     }
+}
 
-    #endregion
-
-
-
-    #region SubAccountTests
+public class SubAccountTests
+{
+    [SetUp]
+    public void Setup()
+    {
+    }
 
     [Test]
     public void TestCreateSubAccount()
@@ -79,12 +81,15 @@ public class Tests
         Assert.AreEqual("Checking", jimminyCricketSubAccount.AccountType.ToString());
         Assert.AreEqual(2143598401, jimminyCricketSubAccount.AccountNumber);
     }
-
-    #endregion
-
+}
 
 
-    #region BankTests
+public class BankTests
+{
+    [SetUp]
+    public void Setup()
+    {
+    }
     [Test]
     public void TestAddBanksToBankDictionary()
     {
@@ -134,22 +139,10 @@ public class Tests
     public void TestAddAccountToBank()
     {
         Bank newBank = new Bank("Mountain America Credit Union", 324079555);
-        Bank.AddAccountToBank(newBank,"Mickey Mouse", 12345678);
+        Bank.AddAccountToBank(newBank, "Mickey Mouse", 12345678);
         Account retrievedAccount = newBank.GetAccount(12345678);
 
         Assert.AreEqual("Mickey Mouse", retrievedAccount.HolderName);
     }
-
-    #endregion BankTests
-
-    // [Test]
-    // public void TestWriteToFile()
-    // {
-    //     Account testAccount = new Account("Curious George", 54321987);
-    //     SubAccount testSubAccount = new SubAccount(SubAccount.AccountTypes.Savings, testAccount);
-    //     Account.AddSubAccount(testAccount, testSubAccount);
-    //     Account.SaveSubAccountsFor(testAccount);
-    // }
-
 
 }

@@ -1,6 +1,6 @@
 namespace PersonalFinanceManager
 {
-    public class Bank
+    public class Bank : IStorageService
     {
         public static Dictionary<string, Bank> bankDictionary = new Dictionary<string, Bank>();
 
@@ -8,6 +8,7 @@ namespace PersonalFinanceManager
         private string name;
         private int routingNumber;
         private bool bankAcctDictHasUnsavedChanges = false;
+        private static bool bankDictHasUnsavedChanges = false;
 
         private static string listOfAccountsAsString;
         public string Name { get => name; }
@@ -64,7 +65,7 @@ namespace PersonalFinanceManager
 
             if (thisBank.bankAcctDictHasUnsavedChanges)
             {
-            
+
                 StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\Accounts.txt");
 
                 foreach (KeyValuePair<long, Account> keyValuePair in thisBank.accountDictionary)
@@ -76,9 +77,52 @@ namespace PersonalFinanceManager
 
                 }
                 fileWriter.Close();
-                
+
             }
         }
+
+        public static void SaveBanks()
+        {
+            // Note to self:Need to make bool check for unsaved changes
+
+            if (bankDictHasUnsavedChanges)
+            {
+
+                StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\Accounts.txt");
+
+                foreach (KeyValuePair<string, Bank> keyValuePair in Bank.bankDictionary)
+                {
+                    fileWriter.WriteLine("BankName:" + keyValuePair.Key);
+                    fileWriter.WriteLine("BankRoutingNum:" + keyValuePair.Value.RoutingNumber);
+                }
+                fileWriter.Close();
+
+            }
+        }
+
+        //---------------DATA STORAGE--------------
+
+        public void StoreData()
+        {
+            SaveAccountsFor(this);
+
+        }
+
+        public void ChangeStoredData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteData()
+        {
+            throw new NotImplementedException();
+        }
+
 
 
         // --------- CONSTRUCTORS ----------
@@ -106,6 +150,7 @@ namespace PersonalFinanceManager
             routingNumber = routingNum;
 
             bankDictionary.Add(bankName, this);
+            bankDictHasUnsavedChanges = true;
 
         }
 
