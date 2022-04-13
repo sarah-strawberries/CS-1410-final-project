@@ -16,8 +16,7 @@ namespace PersonalFinanceManager
 
         private long accountNumber;
         public long AccountNumber => accountNumber;
-        private Bank homeBank;
-        public Bank HomeBank => homeBank;
+    
 
         private string holderName;
         public string HolderName
@@ -67,16 +66,20 @@ namespace PersonalFinanceManager
             if (thisAccount.SubAcctListHasUnsavedChanges)
             {
 
-                StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\SubAccounts.txt");
+                if (!(File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.accountNumber}.txt")))
+            {
+                File.Create($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.accountNumber}.txt");
+            }
+
+                StreamWriter fileWriter = new StreamWriter($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.accountNumber}.txt");
 
                 foreach (KeyValuePair<string, SubAccount> keyValuePair in thisAccount.subAccountDictionary)
                 {
                     fileWriter.WriteLine("Account Number:" + keyValuePair.Value.AccountNumber);
-                    fileWriter.WriteLine("Account Type:" + keyValuePair.Key);
                     fileWriter.WriteLine("Balance:" + keyValuePair.Value.Balance);
-                    fileWriter.WriteLine("End SubAccount");
-
+                    fileWriter.WriteLine("");
                 }
+                fileWriter.Flush();
                 fileWriter.Close();
 
             }
@@ -106,7 +109,6 @@ namespace PersonalFinanceManager
             {
                 throw new ValueNotAllowedException("ERROR: Account number must be exactly 8 digits and must not have 0 as the first digit.");
             }
-            homeBank = bank;
             accountNumber = accountNum;
             holderName = nameOfHolder;
             balance = 0M;

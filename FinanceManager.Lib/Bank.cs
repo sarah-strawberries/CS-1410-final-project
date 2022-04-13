@@ -7,8 +7,8 @@ namespace PersonalFinanceManager
         private Dictionary<long, Account> accountDictionary = new Dictionary<long, Account>();
         private string name;
         private int routingNumber;
-        private bool bankAcctDictHasUnsavedChanges = false;
-        private static bool bankDictHasUnsavedChanges = false;
+        // private bool bankAcctDictHasUnsavedChanges = false;
+        // private static bool bankDictHasUnsavedChanges = false;
 
         private static string listOfAccountsAsString;
         public string Name { get => name; }
@@ -40,7 +40,7 @@ namespace PersonalFinanceManager
         {
             Account acct = new Account(holderName, accountNum, thisBank);
             thisBank.accountDictionary.Add(accountNum, acct);
-            thisBank.bankAcctDictHasUnsavedChanges = true;
+            // thisBank.bankAcctDictHasUnsavedChanges = true;
         }
 
         public Account GetAccount(long accountNum)
@@ -62,42 +62,47 @@ namespace PersonalFinanceManager
         public static void SaveAccountsFor(Bank thisBank)
         {
             // Note to self:Need to make bool check for unsaved changes
+            // if (thisBank.bankAcctDictHasUnsavedChanges)
 
-            if (thisBank.bankAcctDictHasUnsavedChanges)
+            if (!(File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{thisBank.Name + "Accounts"}.txt")))
             {
+                File.Create($@"C:\Users\Allen\code\CS-1410-final-project\Files\{thisBank.Name + "Accounts"}.txt");
+            }
 
-                StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\Accounts.txt");
+                StreamWriter fileWriter = new StreamWriter($@"C:\Users\Allen\code\CS-1410-final-project\Files\{thisBank.Name + "Accoounts"}.txt");
 
                 foreach (KeyValuePair<long, Account> keyValuePair in thisBank.accountDictionary)
                 {
                     fileWriter.WriteLine("Account Number:" + keyValuePair.Value.AccountNumber);
                     fileWriter.WriteLine("Balance:" + keyValuePair.Value.Balance);
-                    fileWriter.WriteLine("Bank:" + keyValuePair.Value.HomeBank.Name);
-                    fileWriter.WriteLine("End SubAccount");
-
+                    fileWriter.WriteLine("");
                 }
+                fileWriter.Flush();
                 fileWriter.Close();
-
-            }
+                // thisBank.bankAcctDictHasUnsavedChanges = false;
+            
+                
         }
 
         public static void SaveBanks()
         {
             // Note to self:Need to make bool check for unsaved changes
 
-            if (bankDictHasUnsavedChanges)
+            // if (bankDictHasUnsavedChanges)
+            // {
+
+            StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\Banks.txt");
+
+            foreach (KeyValuePair<string, Bank> keyValuePair in Bank.bankDictionary)
             {
-
-                StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\Accounts.txt");
-
-                foreach (KeyValuePair<string, Bank> keyValuePair in Bank.bankDictionary)
-                {
-                    fileWriter.WriteLine("BankName:" + keyValuePair.Key);
-                    fileWriter.WriteLine("BankRoutingNum:" + keyValuePair.Value.RoutingNumber);
-                }
-                fileWriter.Close();
-
+                fileWriter.WriteLine("BankName:" + keyValuePair.Key);
+                fileWriter.WriteLine("BankRoutingNum:" + keyValuePair.Value.RoutingNumber);
             }
+            fileWriter.Flush();
+            fileWriter.Close();
+            // bankDictHasUnsavedChanges = false;
+
+            // }
         }
 
         //---------------DATA STORAGE--------------
@@ -105,7 +110,7 @@ namespace PersonalFinanceManager
         public void StoreData()
         {
             SaveAccountsFor(this);
-
+            Bank.SaveBanks();
         }
 
         public void ChangeStoredData()
@@ -150,7 +155,7 @@ namespace PersonalFinanceManager
             routingNumber = routingNum;
 
             bankDictionary.Add(bankName, this);
-            bankDictHasUnsavedChanges = true;
+            // bankDictHasUnsavedChanges = true;
 
         }
 
