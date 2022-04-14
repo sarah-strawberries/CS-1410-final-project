@@ -8,7 +8,7 @@ _________________________________________________________________<br><br>
 
 @* <p role="status">Current number of transactions: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me to add a transaction to the transaction count! (Or
+    <button class="btn btn-primary" @onclick="IncrementCount">Click me to add a transaction to the transaction count! (Or
     come back later for more functionality)</button> *@
 
 @code {
@@ -27,55 +27,61 @@ _________________________________________________________________<br><br>
 <button class="btn btn-primary" @onclick=AddBank>Click to add bank</button><br>
 _________________________________________________________________<br><br>
 
- <h4>Add an account</h4>
+<h4>Add an account</h4>
 <label>
     <input @bind=acctNameInput />
 </label>
 <input @bind=acctNumInput />
-<button class="btn btn-primary" @onclick=addAccount>Click to add account to bank</button><br> 
+<button class="btn btn-primary" @onclick=addAccount>Click to add account to bank</button><br>
 @* Add code to let the user select the bank to add to *@
 
 @code
-{  
+{
+    Bank currentBank;
+
     // ---- Adding a bank ---
-    string bankNameInput = "[bank name here]";
+    string bankNameInput = "";
     public int routingNumInput;
-    int RoutingNumber;
-    string BankName = "";
+    int RoutingNumberDisplay;
+    string BankNameDisplay = "";
 
     string acctNameInput = "";
     long acctNumInput = 0;
-    
+
     public void AddBank()
     {
         try
         {
             Bank newBank = new Bank(bankNameInput, routingNumInput);
-            RoutingNumber = routingNumInput;
-            BankName = bankNameInput;
+            currentBank = newBank;
+            RoutingNumberDisplay = currentBank.RoutingNumber;
+            BankNameDisplay = currentBank.Name;
             ValueNotAllowedException.errorMessage = null;
         }
         catch (ValueNotAllowedException)
         {
-         
+            // do nothing; error will be shown automatically
         }
         bankNameInput = "";
         routingNumInput = 0;
     }
 
     // --- Adding an account ---
-    
+
     public void addAccount()
     {
-        if (BankName != "")
+        if (BankNameDisplay != "")
         {
-            Bank bank = Bank.bankDictionary[BankName];
+            Bank bank = Bank.bankDictionary[BankNameDisplay];
             try
             {
-                
+                bank.AddAccount(new Account(acctNameInput, acctNumInput));
+                ValueNotAllowedException.errorMessage = null;
             }
             catch
-            { }
+            {
+                // do nothing; error will be shown automatically
+            }
         }
     }
     // Adding a transaction
@@ -85,7 +91,8 @@ _________________________________________________________________<br><br>
 
     public void AddTransaction(Account thisAccount)
     {
-        Tuple<string, decimal, DateTime> transaction = new Tuple<string, decimal, DateTime>(memoInput, amountInput, dateTimeInput);
+        Tuple<string, decimal, DateTime> transaction = new Tuple<string, decimal, DateTime>(memoInput, amountInput,
+        dateTimeInput);
     }
 
 
@@ -98,5 +105,14 @@ _________________________________________________________________<br><br>
 
 <br>
 <br>
-<h2>My Bank: @BankName</h2>
-<h4>Routing number: @RoutingNumber</h4>
+<h2>My Bank: @BankNameDisplay</h2>
+<h4>Routing number: @RoutingNumberDisplay</h4>
+
+@if (BankNameDisplay != null && BankNameDisplay != "")
+{
+    <h3>Accounts in @BankNameDisplay:</h3>
+    @foreach (string acctEntry in Bank.GetAccountListFor(currentBank))
+        {
+        <p>@acctEntry</p>
+        }
+}

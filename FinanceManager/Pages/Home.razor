@@ -57,7 +57,7 @@ Fill in the fields below with the name of a bank and with a 9-digit routing numb
     {
         Account testAccount = new Account("Curious George", 54321987);
         SubAccount testSubAccount = new SubAccount(SubAccount.AccountTypes.Savings, testAccount);
-        Account.AddSubAccount(testAccount, testSubAccount);
+        testAccount.AddSubAccount(testSubAccount);
         Account.SaveSubAccountsFor(testAccount);
     }
 }
