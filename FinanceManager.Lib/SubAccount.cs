@@ -33,17 +33,29 @@ namespace PersonalFinanceManager
 
 
         // ---------- VOID METHODS ------------
-        public static void AddCustomCategory(SubAccount thisSubAcct, string customCategoryName)
+        public void AddCustomCategory(string customCategoryName)
         {
-            CustomCategory category = new CustomCategory(customCategoryName);
-            thisSubAcct.customCategoryDictionary.Add(customCategoryName, category);
+            if (customCategoryName.Trim().Length < 1)
+            {
+                throw new ValueNotAllowedException("Custom category name must be at least one character excluding spaces.");
+            }
+            else
+            {
+                CustomCategory category = new CustomCategory(customCategoryName);
+                this.customCategoryDictionary.Add(customCategoryName, category);
+            }
         }
 
-        public static CustomCategory GetCustomCategory(SubAccount thisSubAccount, string key)
+        public CustomCategory GetCustomCategory(string key)
         {
-            return thisSubAccount.customCategoryDictionary[key];
-
-            // Add some code to make it return an error if it has a bad key
+            if (this.customCategoryDictionary.ContainsKey(key))
+            {
+                return this.customCategoryDictionary[key];
+            }
+            else
+            {
+                throw new ArgumentException("A custom category with that key does not exist.");
+            }
         }
 
         // ----------- CONSTRUCTORS ------------
@@ -57,13 +69,14 @@ namespace PersonalFinanceManager
 
         public SubAccount(AccountTypes type, Account baseAccount)
         {
-            if (baseAccount.NumberOfSubAccounts == 100)
-            {
-                throw new MaximumReachedException("ERROR: You have reached the maximum number of sub-accounts for this account.");
-            }
+            // if (baseAccount.NumberOfSubAccounts == 100)
+            // {
+            //     throw new MaximumReachedException("ERROR: You have reached the maximum number of sub-accounts for this account.");
+            // }  ^-- this code is probably not needed because due to the enum of account types being the key in the dictionary, 
+            //          the number of accounts should never pass the number of items in the enum
             AccountType = type;
             BaseAccount = baseAccount;
-            accountNumber = baseAccount.AccountNumber * 100 + baseAccount.NumberOfSubAccounts;
+            accountNumber = baseAccount.AccountNumber * 100 + baseAccount.NumberOfSubAccounts + 1;
         }
 
     }

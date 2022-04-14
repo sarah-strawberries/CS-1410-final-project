@@ -36,12 +36,17 @@ namespace PersonalFinanceManager
             return listOfAccountsAsString;
         }
 
-        public static void AddAccountToBank(Bank thisBank, string holderName, long accountNum)
-        {
-            Account acct = new Account(holderName, accountNum, thisBank);
-            thisBank.accountDictionary.Add(accountNum, acct);
-            // thisBank.bankAcctDictHasUnsavedChanges = true;
-        }
+
+    public void AddAccount(Account thisAccount)
+    {
+        this.accountDictionary.Add(thisAccount.AccountNumber, thisAccount);
+    }
+        // public static void AddAccountToBank(Bank thisBank, string holderName, long accountNum)
+        // {
+        //     Account acct = new Account(holderName, accountNum);
+        //     thisBank.accountDictionary.Add(accountNum, acct);
+        //     // thisBank.bankAcctDictHasUnsavedChanges = true;
+        // }
 
         public Account GetAccount(long accountNum)
         {
