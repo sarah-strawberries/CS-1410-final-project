@@ -24,7 +24,7 @@ public class CustomCategoryTests
     public void TestAddCustomCategoryToDictionary()
     {
         Account myAccount = new Account("Sarah", 12300000);
-        SubAccount mySubAccount = new SubAccount(SubAccount.AccountTypes.Savings, myAccount);
+        SubAccount mySubAccount = new SubAccount(SubAccount.SubAccountTypes.Savings, myAccount);
         mySubAccount.AddCustomCategory("College Savings");
         CustomCategory retrievedCustomCategory = mySubAccount.GetCustomCategory("College Savings");
 
@@ -76,9 +76,9 @@ public class SubAccountTests
     {
 
         Account mainAccount = new Account("Jimminy Cricket", 21435984);
-        mainAccount.AddSubAccount(new SubAccount(SubAccount.AccountTypes.Checking, mainAccount));
+        mainAccount.AddSubAccount(new SubAccount(SubAccount.SubAccountTypes.Checking, mainAccount));
 
-        Assert.AreEqual(2143598401, mainAccount.GetSubAccount(SubAccount.AccountTypes.Checking).AccountNumber);
+        Assert.AreEqual(2143598401, mainAccount.GetSubAccount(SubAccount.SubAccountTypes.Checking).AccountNumber);
     }
 
     public class BankTests

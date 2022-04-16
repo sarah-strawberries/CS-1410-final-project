@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 [Serializable]
 public class ValueNotAllowedException : Exception
 {
-    public static string? errorMessage;
+    public static string? errorMessage ="";
     public ValueNotAllowedException()
     {
     }

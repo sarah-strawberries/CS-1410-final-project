@@ -2,7 +2,7 @@ namespace PersonalFinanceManager
 {
     public class SubAccount : ICategorizableAccount, IAccount
     {
-        public AccountTypes AccountType { get; }
+        public SubAccountTypes AccountType { get; }
         private decimal balance;
         public decimal Balance
         {
@@ -24,7 +24,7 @@ namespace PersonalFinanceManager
 
         private Dictionary<string, CustomCategory> customCategoryDictionary = new Dictionary<string, CustomCategory>();
 
-        public enum AccountTypes
+        public enum SubAccountTypes
         {
             Checking,
             Savings,
@@ -61,13 +61,13 @@ namespace PersonalFinanceManager
         // ----------- CONSTRUCTORS ------------
 
         /// <summary> **This constructor for testing only** </summary>
-        public SubAccount(AccountTypes type)
+        public SubAccount(SubAccountTypes type)
         {
             AccountType = type;
             accountNumber = 87654321;
         }
 
-        public SubAccount(AccountTypes type, Account baseAccount)
+        public SubAccount(SubAccountTypes type, Account baseAccount)
         {
             // if (baseAccount.NumberOfSubAccounts == 100)
             // {
@@ -77,6 +77,14 @@ namespace PersonalFinanceManager
             AccountType = type;
             BaseAccount = baseAccount;
             accountNumber = baseAccount.AccountNumber * 100 + baseAccount.NumberOfSubAccounts + 1;
+        }
+        /// <summary>This constructor is for loading saved SubAccounts only.</summary>
+        public SubAccount(SubAccountTypes type, decimal acctBalance, long subAccountNumber, Account baseAccount)
+        {
+            AccountType = type;
+            balance = acctBalance;
+            accountNumber = subAccountNumber;
+            BaseAccount = baseAccount;
         }
 
     }

@@ -23,7 +23,7 @@ namespace PersonalFinanceManager
             stringListOfAccounts = new List<string>();
             foreach (KeyValuePair<long, Account> entry in thisBank.accountDictionary)
             {
-                stringListOfAccounts.Add($"XXXXX{(entry.Key.ToString()).Substring(4, 4)} : {entry.Value.HolderName}");
+                stringListOfAccounts.Add($"Account Holder: {entry.Value.HolderName} (XXXXX{(entry.Key.ToString()).Substring(4, 4)})  -  {entry.Value.Balance.ToString("c")} ");
             }
 
             return stringListOfAccounts;
@@ -32,7 +32,14 @@ namespace PersonalFinanceManager
 
         public void AddAccount(Account thisAccount)
         {
-            this.accountDictionary.Add(thisAccount.AccountNumber, thisAccount);
+            try
+            {
+                this.accountDictionary.Add(thisAccount.AccountNumber, thisAccount);
+            }
+            catch
+            {
+                throw new ValueNotAllowedException("That account number already exists in the system.");
+            }
         }
         // public static void AddAccountToBank(Bank thisBank, string holderName, long accountNum)
         // {
@@ -123,7 +130,8 @@ namespace PersonalFinanceManager
 
         public void LoadData()
         {
-            throw new NotImplementedException();
+        // Load Banks and accounts
+
         }
 
         public void DeleteData()
@@ -136,27 +144,29 @@ namespace PersonalFinanceManager
         // --------- CONSTRUCTORS ----------
         public Bank(string bankName, int routingNum)
         {
-            #region ConstrainingCode
             if (bankName.Trim().Length <= 1 || bankName == null)
             {
                 throw new ValueNotAllowedException("Bank name must not be a blank field and also must contain more than one character.");
             }
             else if (bankDictionary.ContainsKey(bankName))
             {
-                throw new ValueNotAllowedException("A bank with that name already exists.");
+                throw new ValueNotAllowedException("A bank with that name already exists in the system.");
+            }
+            foreach (KeyValuePair<string, Bank> kvPair in Bank.bankDictionary)
+            {
+                if (kvPair.Value.RoutingNumber == routingNum)
+                {
+                    throw new ValueNotAllowedException("A bank with that routing number already exists in the system.");
+                }
             }
             name = bankName.Trim();
-
 
             if (Convert.ToString(routingNum).Length != 9)
             {
                 throw new ValueNotAllowedException("Routing number must be 9 digits, and the first digit must not be 0.");
             }
-            // Need to add something in here to make sure there are no banks with the same name or routing numbers
 
-            #endregion
             routingNumber = routingNum;
-
             bankDictionary.Add(bankName, this);
             // bankDictHasUnsavedChanges = true;
 
