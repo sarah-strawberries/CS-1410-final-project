@@ -6,33 +6,46 @@
 <h1>Account Manager</h1>
 _________________________________________________________________<br><br>
 
+
+@if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
+{
+    <p>ERROR:@ValueNotAllowedException.errorMessage</p> 
+}
+<button disabled=@errorIsResolved @onclick=ResetErrorMessage>OK</button><br><br>
+
+
+
 @* <p role="status">Current number of transactions: @currentCount</p>
 
     <button class="btn btn-primary" @onclick="IncrementCount">Click me to add a transaction to the transaction count! (Or
     come back later for more functionality)</button> *@
 
-@code {
-    private int currentCount = 0;
-
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
-}
 <h4>Add a bank</h4>
-<label>
+<label> Bank Name:<br>
     <input @bind=bankNameInput />
 </label>
-<input @bind=routingNumInput />
-<button class="btn btn-primary" @onclick=AddBank>Click to add bank</button><br>
+<br><br>
+
+<label> Routing Number: <br>
+    <input @bind=routingNumInput />
+</label>
+<br><br>
+
+<button class="btn btn-primary" @onclick=AddBank>Add Bank</button><br><br>
 _________________________________________________________________<br><br>
 
 <h4>Add an account</h4>
-<label>
+<label> Holder name:<br>
     <input @bind=acctNameInput />
 </label>
+<br><br>
+
+<label> Account number: <br>
 <input @bind=acctNumInput />
-<button class="btn btn-primary" @onclick=addAccount>Click to add account to bank</button><br>
+</label>
+<br><br>
+
+<button class="btn btn-primary" @onclick=addAccount>Add Account</button><br>
 @* Add code to let the user select the bank to add to *@
 
 @code
@@ -48,19 +61,19 @@ _________________________________________________________________<br><br>
     string acctNameInput = "";
     long acctNumInput = 0;
 
-    public void AddBank()
+    void AddBank()
     {
+        ValueNotAllowedException.errorMessage = null;
         try
         {
             Bank newBank = new Bank(bankNameInput, routingNumInput);
             currentBank = newBank;
             RoutingNumberDisplay = currentBank.RoutingNumber;
             BankNameDisplay = currentBank.Name;
-            ValueNotAllowedException.errorMessage = null;
         }
         catch (ValueNotAllowedException)
         {
-            // do nothing; error will be shown automatically
+            errorIsResolved = false;
         }
         bankNameInput = "";
         routingNumInput = 0;
@@ -68,9 +81,9 @@ _________________________________________________________________<br><br>
 
     // --- Adding an account ---
 
-    public void addAccount()
+    void addAccount()
     {
-        if (BankNameDisplay != "")
+        try
         {
             Bank bank = Bank.bankDictionary[BankNameDisplay];
             try
@@ -80,8 +93,15 @@ _________________________________________________________________<br><br>
             }
             catch
             {
-                // do nothing; error will be shown automatically
+                errorIsResolved = false;
             }
+            acctNameInput = "";
+            acctNumInput = 0; 
+        }
+        catch
+        {
+            errorIsResolved = false;
+            ValueNotAllowedException.errorMessage = "No bank selected. Please select or add a bank and try again.";
         }
     }
     // Adding a transaction
@@ -89,18 +109,29 @@ _________________________________________________________________<br><br>
     decimal amountInput;
     DateTime dateTimeInput;
 
-    public void AddTransaction(Account thisAccount)
+    void AddTransaction(Account thisAccount)
     {
         Tuple<string, decimal, DateTime> transaction = new Tuple<string, decimal, DateTime>(memoInput, amountInput,
         dateTimeInput);
     }
 
 
+    bool errorIsResolved = true;
+    void ResetErrorMessage()
+    {
+        ValueNotAllowedException.errorMessage = "";
+        errorIsResolved = true;
+    }
+
 }
 
-@if (ValueNotAllowedException.errorMessage != null)
-{
-    <p>ERROR: @ValueNotAllowedException.errorMessage</p>
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
 }
 
 <br>
@@ -110,7 +141,7 @@ _________________________________________________________________<br><br>
 
 @if (BankNameDisplay != null && BankNameDisplay != "")
 {
-    <h3>Accounts in @BankNameDisplay:</h3>
+    <h3>Accounts in this bank:</h3>
     @foreach (string acctEntry in Bank.GetAccountListFor(currentBank))
         {
         <p>@acctEntry</p>
