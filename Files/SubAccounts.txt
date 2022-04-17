@@ -1,4 +1,0 @@
-Account Type:Savings
-Account Number:5432198701
-Balance:0
-End SubAccount

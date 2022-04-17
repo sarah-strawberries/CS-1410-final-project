@@ -16,21 +16,17 @@
 
 <br>
 <br>
-@code
-{
-    public static void TestFileWriting()
-    {
-        Account testAccount = new Account("Curious George", 54321987);
-        SubAccount testSubAccount = new SubAccount(SubAccount.SubAccountTypes.Savings, testAccount);
-        testAccount.AddSubAccount(testSubAccount);
-        Account.SaveSubAccountsFor(testAccount);
-    }
-}
+
 <br>
 Stuff to add on this page:<br><br>
 
 - History of recent transactions <br>
-- Button to add a transaction
+- Button to add a transaction <br>
+@* <button class="btn btn-primary" @onclick=WithdrawalTransaction>Withdraw Funds</button><br><br> *@
+
+<br><br>
+
+<button class="btn btn-primary" @onclick=Bank.StoreData>Save Data</button><br><br>
+<button class="btn btn-primary" @onclick=Bank.LoadData>Load Data</button><br>
 
 
-@* <button class="btn btn-primary" @onclick="TestFileWriting">Click me to write to a file!</button> *@

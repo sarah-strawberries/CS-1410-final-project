@@ -25,7 +25,7 @@ public class CustomCategoryTests
     {
         Account myAccount = new Account("Sarah", 12300000);
         SubAccount mySubAccount = new SubAccount(SubAccount.SubAccountTypes.Savings, myAccount);
-        mySubAccount.AddCustomCategory("College Savings");
+        mySubAccount.CreateAndAddCustomCategory("College Savings");
         CustomCategory retrievedCustomCategory = mySubAccount.GetCustomCategory("College Savings");
 
         Assert.AreEqual("College Savings", retrievedCustomCategory.CategoryName);

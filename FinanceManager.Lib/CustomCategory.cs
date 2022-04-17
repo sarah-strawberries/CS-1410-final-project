@@ -26,10 +26,23 @@ namespace PersonalFinanceManager
 
         private string categoryName;
 
+        //----------- METHODS ------------
+        
+
+        //----------- CONSTRUCTORS ------------
+
         public CustomCategory(string category)
         {
             categoryName = category;
             balance = 0;
+        }
+
+
+        /// <summary>This constructor is for loading existing custom categories only.</summary>
+        public CustomCategory(decimal categoryBalance, string name)
+        {
+            categoryName = name;
+            balance = categoryBalance;
         }
     }
 }

@@ -9,7 +9,7 @@ _________________________________________________________________<br><br>
 
 @if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
 {
-    <p>ERROR:@ValueNotAllowedException.errorMessage</p> 
+    <p>ERROR:@ValueNotAllowedException.errorMessage</p>
 }
 <button disabled=@errorIsResolved @onclick=ResetErrorMessage>OK</button><br><br>
 
@@ -41,11 +41,14 @@ _________________________________________________________________<br><br>
 <br><br>
 
 <label> Account number: <br>
-<input @bind=acctNumInput />
+    <input @bind=acctNumInput />
 </label>
 <br><br>
 
-<button class="btn btn-primary" @onclick=addAccount>Add Account</button><br>
+<button class="btn btn-primary" @onclick=addAccount>Add Account</button><br><br>
+
+_________________________________________________________________<br><br>
+
 @* Add code to let the user select the bank to add to *@
 
 @code
@@ -75,6 +78,7 @@ _________________________________________________________________<br><br>
         {
             errorIsResolved = false;
         }
+        BankNames.Add(currentBank.Name);
         bankNameInput = "";
         routingNumInput = 0;
     }
@@ -96,7 +100,7 @@ _________________________________________________________________<br><br>
                 errorIsResolved = false;
             }
             acctNameInput = "";
-            acctNumInput = 0; 
+            acctNumInput = 0;
         }
         catch
         {
@@ -104,6 +108,9 @@ _________________________________________________________________<br><br>
             ValueNotAllowedException.errorMessage = "No bank selected. Please select or add a bank and try again.";
         }
     }
+    // Adding a SubAccount
+    int subAcctTypeInput = 0;
+
     // Adding a transaction
     string memoInput;
     decimal amountInput;
@@ -132,18 +139,121 @@ _________________________________________________________________<br><br>
     {
         currentCount++;
     }
+
+    public void testButton()
+    {
+
+    }
 }
 
-<br>
-<br>
-<h2>My Bank: @BankNameDisplay</h2>
+<h2>Current Bank: <b>@BankNameDisplay</b></h2>
 <h4>Routing number: @RoutingNumberDisplay</h4>
+
+<button disabled=beginningOfBankNameList @onclick=previousBank>Previous</button>
+<button disabled=endOfBankNameList @onclick=nextBank>Next</button><br><br>
+
+
+@code
+{
+    // Previous/next buttons
+    protected override void OnInitialized()
+    {
+        try
+        {
+            Bank.LoadData();
+            foreach (var kvPair in Bank.bankDictionary)
+            {
+                BankNames.Add(kvPair.Key);
+            }
+            if (BankNames.Count >= 1)
+            {
+                currentBank = Bank.bankDictionary[BankNames[0]];
+                beginningOfBankNameList = true;
+                if (BankNames.Count == 1)
+                {
+                    endOfBankNameList = true;
+                }
+                else
+                {
+                    endOfBankNameList = false;
+                }
+
+            }
+            else
+            {
+                beginningOfBankNameList = true;
+                endOfBankNameList = true;
+            }
+        }
+        catch
+        {
+
+        }
+    }
+
+    void previousBank()
+    {
+        if (bankNumber > 0)
+        {
+            bankNumber--;
+            currentBank = Bank.bankDictionary[BankNames[bankNumber]];
+
+            if (bankNumber == 0)
+            {
+                beginningOfBankNameList = true;
+            }
+            else
+            {
+                beginningOfBankNameList = false;
+            }
+
+            endOfBankNameList = false;
+        }
+        else
+        {
+            beginningOfBankNameList = true;
+        }
+
+    }
+    void nextBank()
+    {
+        if (bankNumber < BankNames.Count - 1)
+        {
+            bankNumber++;
+            currentBank = Bank.bankDictionary[BankNames[bankNumber]];
+
+            if (bankNumber == BankNames.Count - 1)
+            {
+                endOfBankNameList = true;
+            }
+            else
+            {
+                endOfBankNameList = false;
+            }
+
+            beginningOfBankNameList = false;
+        }
+        else
+        {
+            endOfBankNameList = true;
+        }
+    }
+
+
+    // Bank List Stuff
+
+    List<string> BankNames = new List<string>();
+    bool beginningOfBankNameList;
+    bool endOfBankNameList;
+    int bankNumber = 0;
+
+}
 
 @if (BankNameDisplay != null && BankNameDisplay != "")
 {
     <h3>Accounts in this bank:</h3>
     @foreach (string acctEntry in Bank.GetAccountListFor(currentBank))
-        {
+    {
         <p>@acctEntry</p>
-        }
+    }
 }

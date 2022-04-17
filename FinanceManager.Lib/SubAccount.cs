@@ -31,9 +31,9 @@ namespace PersonalFinanceManager
             MoneyMarket
         }
 
+        // ---------- METHODS ------------
 
-        // ---------- VOID METHODS ------------
-        public void AddCustomCategory(string customCategoryName)
+        public void CreateAndAddCustomCategory(string customCategoryName)
         {
             if (customCategoryName.Trim().Length < 1)
             {
@@ -46,6 +46,47 @@ namespace PersonalFinanceManager
             }
         }
 
+        ///<summary>This method is used for adding an existing custom category from a file.</summary>
+        public void AddCustomCategory(CustomCategory newCustomCategoryToAdd)
+        {
+            this.customCategoryDictionary.Add(newCustomCategoryToAdd.CategoryName, newCustomCategoryToAdd);
+        }
+
+        public static void SaveCustomCategoriesFor(SubAccount thisSubAccount)
+        {
+            // Note to self: make bool check for unsaved changes(?)
+
+            // if (thisAccount.SubAcctListHasUnsavedChanges)
+
+            if (!(File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt")))
+            {
+                File.Create($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt");
+            }
+            else
+            {
+                //Clear contents of file:
+                using (FileStream fs = File.Open($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    lock (fs)
+                    {
+                        fs.SetLength(0);
+                    }
+                }
+            }
+
+            StreamWriter fileWriter = new StreamWriter($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt");
+
+            foreach (KeyValuePair<string, CustomCategory> keyValuePair in thisSubAccount.customCategoryDictionary)
+            {
+                fileWriter.WriteLine("Balance:" + keyValuePair.Value.Balance);
+                fileWriter.WriteLine("CustomCategory Name:" + keyValuePair.Value.CategoryName);
+                fileWriter.WriteLine("End:Yes");
+            }
+            fileWriter.Flush();
+            fileWriter.Close();
+
+        }
+
         public CustomCategory GetCustomCategory(string key)
         {
             if (this.customCategoryDictionary.ContainsKey(key))
@@ -55,6 +96,41 @@ namespace PersonalFinanceManager
             else
             {
                 throw new ArgumentException("A custom category with that key does not exist.");
+            }
+        }
+
+        public static Dictionary<string, CustomCategory> LoadCustomCategoriesFor(SubAccount thisSubAccount)
+        {
+            if (File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt"))
+            {
+                var customCategories = new Dictionary<string, CustomCategory>();
+                string categoryName = "";
+                decimal balance = 0M;
+
+                foreach (var line in File.ReadAllLines($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt"))
+                {
+                    var parts = line.Split(':');
+                    if (parts[0] == "Balance")
+                    {
+                        balance = decimal.Parse(parts[1]);
+                    }
+
+                    else if (parts[0] == "CustomCategory Name")
+                    {
+                        categoryName = parts[2];
+                    }
+
+                    else if (parts[0] == "End")
+                    {
+                        thisSubAccount.AddCustomCategory(new CustomCategory(balance, categoryName));
+                    }
+                }
+
+                return customCategories;
+            }
+            else
+            {
+                return new Dictionary<string, CustomCategory>();
             }
         }
 

@@ -3,16 +3,18 @@ namespace PersonalFinanceManager
 {
     public class Account : ICategorizableAccount, IAccount
     {
-        internal decimal balance;
+        private decimal balance;
         public virtual decimal Balance
         {
             get => balance;
             private set
             {
-                balance += value;
-                // Add more constraining code
+                balance = value;
             }
         }
+
+        public decimal AmountToWithdraw = 0M;
+        public decimal AmountToDeposit = 0M;
 
         private long accountNumber;
         public long AccountNumber => accountNumber;
@@ -37,14 +39,42 @@ namespace PersonalFinanceManager
         // /// <summary> Please make me check for unsaved changes! </summary>
         // public bool SubAcctListHasUnsavedChanges = false;
 
-        private Dictionary<string, SubAccount> subAccountDictionary = new Dictionary<string, SubAccount>();
+        public Dictionary<string, SubAccount> SubAccountDictionary = new Dictionary<string, SubAccount>();
         private List<Tuple<string, decimal, DateTime>> transactions = new List<Tuple<string, decimal, DateTime>>();
         // ------------ METHODS ------------
+
+        public void WithdrawalTransaction()
+        {
+            if (WithdrawFunds(AmountToWithdraw))
+            {
+                Bank.UIFeedback = $"Withdrawal of ${AmountToWithdraw} succeeded!";
+            }
+            else
+            {
+                throw new ValueNotAllowedException("Insufficient funds.");
+            }
+        }
+
+        public bool WithdrawFunds(decimal amount)
+        {
+            if (Balance - amount < 0)
+            {
+                return false;
+            }
+            Balance -= amount;
+            return true;
+        }
+
+        public void DepositFunds(decimal amount)
+        {
+            Balance += amount;
+        }
+
         public SubAccount GetSubAccount(SubAccount.SubAccountTypes account)
         {
             try
             {
-                return this.subAccountDictionary[account.ToString()];
+                return this.SubAccountDictionary[account.ToString()];
             }
             catch
             {
@@ -52,13 +82,14 @@ namespace PersonalFinanceManager
             }
         }
 
-        // ---------- VOID METHODS ------------
+        // ---------- VOID METHODS -----------
+
         public void AddSubAccount(SubAccount newSubAccountToAdd)
         {
             this.numberOfSubAccounts++;
             try
             {
-                this.subAccountDictionary.Add(newSubAccountToAdd.AccountType.ToString(), newSubAccountToAdd);
+                this.SubAccountDictionary.Add(newSubAccountToAdd.AccountType.ToString(), newSubAccountToAdd);
             }
             catch (MaximumReachedException)
             {
@@ -72,20 +103,36 @@ namespace PersonalFinanceManager
         {
             // Note to self: make bool check for unsaved changes
 
+            // Other note to self: Make sure that the file doesn't overwrite itself partially and leave part as it was.
+            // Maybe clear the entire file before saving.
+
             // if (thisAccount.SubAcctListHasUnsavedChanges)
 
-            if (!(File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.accountNumber}.txt")))
+            if (!(File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.ItemKey}.txt")))
             {
-                File.Create($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.accountNumber}.txt");
+                File.Create($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.ItemKey}.txt");
+            }
+            else
+            {
+                //Clear contents of file:
+                using (FileStream fs = File.Open($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisAccount.ItemKey}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    lock (fs)
+                    {
+                        fs.SetLength(0);
+                    }
+                }
             }
 
-            StreamWriter fileWriter = new StreamWriter($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.accountNumber}.txt");
+            StreamWriter fileWriter = new StreamWriter($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.ItemKey}.txt");
 
-            foreach (KeyValuePair<string, SubAccount> keyValuePair in thisAccount.subAccountDictionary)
+            foreach (KeyValuePair<string, SubAccount> keyValuePair in thisAccount.SubAccountDictionary)
             {
                 fileWriter.WriteLine("SubAccount Number:" + keyValuePair.Value.AccountNumber);
                 fileWriter.WriteLine("Balance:" + keyValuePair.Value.Balance);
                 fileWriter.WriteLine("SubAccount Type:" + keyValuePair.Value.AccountType);
+                fileWriter.WriteLine("End:Yes");
+
             }
             fileWriter.Flush();
             fileWriter.Close();
@@ -94,14 +141,14 @@ namespace PersonalFinanceManager
 
         public static Dictionary<string, SubAccount> LoadSubAcctsFor(Account thisAccount)
         {
-            if (File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.accountNumber}.txt"))
+            if (File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.ItemKey}.txt"))
             {
                 var subAccounts = new Dictionary<string, SubAccount>();
                 long subAcctNum = 0;
                 decimal balance = 0M;
-                SubAccount.SubAccountTypes subAcctType;
+                SubAccount.SubAccountTypes subAcctType = SubAccount.SubAccountTypes.Checking;
 
-                foreach (var line in File.ReadAllLines($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.accountNumber}.txt"))
+                foreach (var line in File.ReadAllLines($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.ItemKey}.txt"))
                 {
                     var parts = line.Split(':');
                     if (parts[0] == "SubAccount Number")
@@ -117,6 +164,9 @@ namespace PersonalFinanceManager
                     else if (parts[0] == "SubAccount Type")
                     {
                         subAcctType = (SubAccount.SubAccountTypes)Enum.Parse(typeof(SubAccount.SubAccountTypes), parts[1]);
+                    }
+                    else if (parts[0] == "End")
+                    {
                         thisAccount.AddSubAccount(new SubAccount(subAcctType, balance, subAcctNum, thisAccount));
                     }
                 }
@@ -165,5 +215,14 @@ namespace PersonalFinanceManager
             holderName = nameOfHolder;
             balance = 0M;
         }
+
+        ///<summary>This constructor is for loading existing accounts.</summary>
+        public Account(long accountNum, decimal acctBalance, string nameOfHolder)
+        {
+            accountNumber = accountNum;
+            holderName = nameOfHolder;
+            balance = acctBalance;
+        }
+
     }
 }

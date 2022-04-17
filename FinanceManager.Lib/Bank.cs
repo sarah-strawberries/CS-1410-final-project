@@ -10,6 +10,8 @@ namespace PersonalFinanceManager
         // private bool bankAcctDictHasUnsavedChanges = false;
         // private static bool bankDictHasUnsavedChanges = false;
 
+        public static string? UIFeedback;
+
         private static List<string> stringListOfAccounts;
         public string Name { get => name; }
         public int RoutingNumber { get => routingNumber; }
@@ -78,14 +80,26 @@ namespace PersonalFinanceManager
             {
                 File.Create($@"C:\Users\Allen\code\CS-1410-final-project\Files\{thisBank.Name + "Accounts"}.txt");
             }
+            else
+            {
+                //Clear contents of file:
+                using (FileStream fs = File.Open($@"C:\Users\Allen\code\CS-1410-final-project\Files\{thisBank.Name + "Accounts"}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    lock (fs)
+                    {
+                        fs.SetLength(0);
+                    }
+                }
+            }
 
-            StreamWriter fileWriter = new StreamWriter($@"C:\Users\Allen\code\CS-1410-final-project\Files\{thisBank.Name + "Accoounts"}.txt");
+            StreamWriter fileWriter = new StreamWriter($@"C:\Users\Allen\code\CS-1410-final-project\Files\{thisBank.Name + "Accounts"}.txt");
 
             foreach (KeyValuePair<long, Account> keyValuePair in thisBank.accountDictionary)
             {
                 fileWriter.WriteLine("Account Number:" + keyValuePair.Value.AccountNumber);
                 fileWriter.WriteLine("Balance:" + keyValuePair.Value.Balance);
-                fileWriter.WriteLine("");
+                fileWriter.WriteLine("Holder Name:" + keyValuePair.Value.HolderName);
+                fileWriter.WriteLine("End:yes");
             }
             fileWriter.Flush();
             fileWriter.Close();
@@ -94,6 +108,49 @@ namespace PersonalFinanceManager
 
         }
 
+        public static Dictionary<long, Account> LoadAcctsFor(Bank thisBank)
+        {
+            if (File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{thisBank.Name + "Accounts"}.txt"))
+            {
+                var accounts = new Dictionary<long, Account>();
+                long acctNum = 0;
+                decimal balance = 0M;
+                string nameOfHolder = "";
+
+                foreach (var line in File.ReadAllLines($@"C:\Users\Allen\code\CS-1410-final-project\Files\{thisBank.Name + "Accounts"}.txt"))
+                {
+                    var parts = line.Split(':');
+                    if (parts[0] == "Account Number")
+                    {
+                        acctNum = long.Parse(parts[1]);
+                    }
+
+                    else if (parts[0] == "Balance")
+                    {
+                        balance = decimal.Parse(parts[1]);
+                    }
+
+                    else if (parts[0] == "Holder Name")
+                    {
+                        nameOfHolder = parts[1];
+                    }
+
+                    else if (parts[0] == "End")
+                    {
+                        thisBank.AddAccount(new Account(acctNum, balance, nameOfHolder));
+                    }
+                }
+
+                return accounts;
+            }
+            else
+            {
+                return new Dictionary<long, Account>();
+            }
+        }
+
+
+
         public static void SaveBanks()
         {
             // Note to self:Need to make bool check for unsaved changes
@@ -101,12 +158,22 @@ namespace PersonalFinanceManager
             // if (bankDictHasUnsavedChanges)
             // {
 
+            //Clear contents of file:
+            using (FileStream fs = File.Open(@"C:\Users\Allen\code\CS-1410-final-project\Files\Banks.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                lock (fs)
+                {
+                    fs.SetLength(0);
+                }
+            }
+
             StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\Banks.txt");
 
             foreach (KeyValuePair<string, Bank> keyValuePair in Bank.bankDictionary)
             {
-                fileWriter.WriteLine("BankName:" + keyValuePair.Key);
-                fileWriter.WriteLine("BankRoutingNum:" + keyValuePair.Value.RoutingNumber);
+                fileWriter.WriteLine("Bank Name:" + keyValuePair.Key);
+                fileWriter.WriteLine("Routing Number:" + keyValuePair.Value.RoutingNumber);
+                fileWriter.WriteLine("End:yes");
             }
             fileWriter.Flush();
             fileWriter.Close();
@@ -117,10 +184,24 @@ namespace PersonalFinanceManager
 
         //---------------DATA STORAGE--------------
 
-        public void StoreData()
+        public static void StoreData()
         {
-            SaveAccountsFor(this);
-            Bank.SaveBanks();
+            SaveBanks();
+            foreach (var bankKVPair in bankDictionary)
+            {
+                var currentBank = bankKVPair.Value;
+                SaveAccountsFor(currentBank);
+                // foreach (var acctKVPair in currentBank.accountDictionary)
+                // {
+                //     var currentAccount = acctKVPair.Value;
+                //     Account.SaveSubAccountsFor(currentAccount);
+                //     foreach (var subAcctKVPair in currentAccount.SubAccountDictionary)
+                //     {
+                //         var currentSubAccount = subAcctKVPair.Value;
+                //         SubAccount.SaveCustomCategoriesFor(currentSubAccount);
+                //     }
+                // }
+            }
         }
 
         public void ChangeStoredData()
@@ -128,9 +209,24 @@ namespace PersonalFinanceManager
             throw new NotImplementedException();
         }
 
-        public void LoadData()
+        public static void LoadData()
         {
-        // Load Banks and accounts
+            bankDictionary = Bank.LoadBanks();
+            foreach (var bankKVPair in bankDictionary)
+            {
+                var currentBank = bankKVPair.Value;
+                Bank.LoadAcctsFor(currentBank);
+                // foreach (var acctKVPair in currentBank.accountDictionary)
+                // {
+                //     var currentAccount = acctKVPair.Value;
+                //     Account.LoadSubAcctsFor(currentAccount);
+                //     foreach (var subAcctKVPair in currentAccount.SubAccountDictionary)
+                //     {
+                //         var currentSubAccount = subAcctKVPair.Value;
+                //         SubAccount.LoadCustomCategoriesFor(currentSubAccount);
+                //     }
+                // }
+            }
 
         }
 
@@ -139,7 +235,40 @@ namespace PersonalFinanceManager
             throw new NotImplementedException();
         }
 
+        public static Dictionary<string, Bank> LoadBanks()
+        {
+            if (File.Exists(@"C:\Users\Allen\code\CS-1410-final-project\Files\Banks.txt"))
+            {
+                var banks = new Dictionary<string, Bank>();
+                int routingNum = 0;
+                string bankName = "";
 
+                foreach (var line in File.ReadAllLines(@"C:\Users\Allen\code\CS-1410-final-project\Files\Banks.txt"))
+                {
+                    var parts = line.Split(':');
+                    if (parts[0] == "Bank Name")
+                    {
+                        bankName = parts[1];
+                    }
+
+                    else if (parts[0] == "Routing Number")
+                    {
+                        routingNum = int.Parse(parts[2]);
+                    }
+
+                    else if (parts[0] == "End")
+                    {
+                        Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
+                    }
+                }
+
+                return banks;
+            }
+            else
+            {
+                return new Dictionary<string, Bank>();
+            }
+        }
 
         // --------- CONSTRUCTORS ----------
         public Bank(string bankName, int routingNum)
