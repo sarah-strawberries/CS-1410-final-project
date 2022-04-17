@@ -6,7 +6,7 @@ namespace PersonalFinanceManager
 
         private Dictionary<long, Account> accountDictionary = new Dictionary<long, Account>();
         private string name;
-        private int routingNumber;
+        private long routingNumber;
         // private bool bankAcctDictHasUnsavedChanges = false;
         // private static bool bankDictHasUnsavedChanges = false;
 
@@ -14,7 +14,7 @@ namespace PersonalFinanceManager
 
         private static List<string> stringListOfAccounts;
         public string Name { get => name; }
-        public int RoutingNumber { get => routingNumber; }
+        public long RoutingNumber { get => routingNumber; }
 
 
         // ---------- METHODS ----------
@@ -159,13 +159,13 @@ namespace PersonalFinanceManager
             // {
 
             //Clear contents of file:
-            using (FileStream fs = File.Open(@"C:\Users\Allen\code\CS-1410-final-project\Files\Banks.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
-            {
-                lock (fs)
-                {
-                    fs.SetLength(0);
-                }
-            }
+            // using (FileStream fs = File.Open(@"C:\Users\Allen\code\CS-1410-final-project\Files\Banks.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            // {
+            //     lock (fs)
+            //     {
+            //         fs.SetLength(0);
+            //     }
+            // }
 
             StreamWriter fileWriter = new StreamWriter(@"C:\Users\Allen\code\CS-1410-final-project\Files\Banks.txt");
 
@@ -240,7 +240,7 @@ namespace PersonalFinanceManager
             if (File.Exists(@"C:\Users\Allen\code\CS-1410-final-project\Files\Banks.txt"))
             {
                 var banks = new Dictionary<string, Bank>();
-                int routingNum = 0;
+                long routingNum = 0;
                 string bankName = "";
 
                 foreach (var line in File.ReadAllLines(@"C:\Users\Allen\code\CS-1410-final-project\Files\Banks.txt"))
@@ -253,7 +253,7 @@ namespace PersonalFinanceManager
 
                     else if (parts[0] == "Routing Number")
                     {
-                        routingNum = int.Parse(parts[2]);
+                        routingNum = long.Parse(parts[2]);
                     }
 
                     else if (parts[0] == "End")
@@ -271,7 +271,7 @@ namespace PersonalFinanceManager
         }
 
         // --------- CONSTRUCTORS ----------
-        public Bank(string bankName, int routingNum)
+        public Bank(string bankName, long routingNum)
         {
             if (bankName.Trim().Length <= 1 || bankName == null)
             {
@@ -298,6 +298,12 @@ namespace PersonalFinanceManager
             routingNumber = routingNum;
             bankDictionary.Add(bankName, this);
             // bankDictHasUnsavedChanges = true;
+
+        }
+
+        public Bank()
+        {
+            // loading from saved data...
 
         }
 

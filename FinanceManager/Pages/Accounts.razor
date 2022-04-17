@@ -49,18 +49,13 @@ _________________________________________________________________<br><br>
 
 _________________________________________________________________<br><br>
 
-@* Add code to let the user select the bank to add to *@
-
 @code
 {
-    Bank currentBank;
+    Bank currentBank = new Bank("Default Bank", 123456789);
 
     // ---- Adding a bank ---
     string bankNameInput = "";
     public int routingNumInput;
-    int RoutingNumberDisplay;
-    string BankNameDisplay = "";
-
     string acctNameInput = "";
     long acctNumInput = 0;
 
@@ -71,14 +66,16 @@ _________________________________________________________________<br><br>
         {
             Bank newBank = new Bank(bankNameInput, routingNumInput);
             currentBank = newBank;
-            RoutingNumberDisplay = currentBank.RoutingNumber;
-            BankNameDisplay = currentBank.Name;
         }
         catch (ValueNotAllowedException)
         {
             errorIsResolved = false;
         }
         BankNames.Add(currentBank.Name);
+        //if (BankNames.Count > 1)
+        //{
+        beginningOfBankNameList = false;
+        //}
         bankNameInput = "";
         routingNumInput = 0;
     }
@@ -89,7 +86,7 @@ _________________________________________________________________<br><br>
     {
         try
         {
-            Bank bank = Bank.bankDictionary[BankNameDisplay];
+            Bank bank = Bank.bankDictionary[currentBank.Name];
             try
             {
                 bank.AddAccount(new Account(acctNameInput, acctNumInput));
@@ -130,66 +127,60 @@ _________________________________________________________________<br><br>
         errorIsResolved = true;
     }
 
-}
-
-@code {
     private int currentCount = 0;
 
     private void IncrementCount()
     {
         currentCount++;
     }
-
-    public void testButton()
-    {
-
-    }
 }
 
-<h2>Current Bank: <b>@BankNameDisplay</b></h2>
-<h4>Routing number: @RoutingNumberDisplay</h4>
-
-<button disabled=beginningOfBankNameList @onclick=previousBank>Previous</button>
-<button disabled=endOfBankNameList @onclick=nextBank>Next</button><br><br>
+<h2>Current Bank: <b>@currentBank.Name</b></h2>
+<h4>Routing number: @currentBank.RoutingNumber</h4>
+@*
+    <button disabled=@beginningOfBankNameList @onclick=previousBank>Previous</button>
+    <button disabled=@endOfBankNameList @onclick=nextBank>Next</button><br><br> *@
 
 
 @code
 {
     // Previous/next buttons
-    protected override void OnInitialized()
+    @* protected override void OnInitialized()
     {
-        try
+        if (BankNames[0] == null)
         {
-            Bank.LoadData();
-            foreach (var kvPair in Bank.bankDictionary)
+            try
             {
-                BankNames.Add(kvPair.Key);
-            }
-            if (BankNames.Count >= 1)
-            {
-                currentBank = Bank.bankDictionary[BankNames[0]];
-                beginningOfBankNameList = true;
-                if (BankNames.Count == 1)
+                // Bank.LoadData();
+                foreach (var kvPair in Bank.bankDictionary)
                 {
-                    endOfBankNameList = true;
+                    BankNames.Add(kvPair.Key);
+                }
+                if (BankNames.Count >= 1)
+                {
+                    currentBank = Bank.bankDictionary[BankNames[0]];
+                    beginningOfBankNameList = true;
+                    if (BankNames.Count == 1)
+                    {
+                        endOfBankNameList = true;
+                    }
+                    else
+                    {
+                        endOfBankNameList = false;
+                    }
                 }
                 else
                 {
-                    endOfBankNameList = false;
+                    beginningOfBankNameList = true;
+                    endOfBankNameList = true;
                 }
-
             }
-            else
+            catch
             {
-                beginningOfBankNameList = true;
-                endOfBankNameList = true;
+
             }
         }
-        catch
-        {
-
-        }
-    }
+    } *@
 
     void previousBank()
     {
@@ -201,23 +192,19 @@ _________________________________________________________________<br><br>
             if (bankNumber == 0)
             {
                 beginningOfBankNameList = true;
+                endOfBankNameList = false;
             }
             else
             {
                 beginningOfBankNameList = false;
             }
-
-            endOfBankNameList = false;
         }
-        else
-        {
-            beginningOfBankNameList = true;
-        }
-
     }
+
+
     void nextBank()
     {
-        if (bankNumber < BankNames.Count - 1)
+        if (bankNumber < BankNames.Count - 1 && bankNumber > 0)
         {
             bankNumber++;
             currentBank = Bank.bankDictionary[BankNames[bankNumber]];
@@ -249,7 +236,7 @@ _________________________________________________________________<br><br>
 
 }
 
-@if (BankNameDisplay != null && BankNameDisplay != "")
+@if (currentBank.Name != null && currentBank.RoutingNumber != 0)
 {
     <h3>Accounts in this bank:</h3>
     @foreach (string acctEntry in Bank.GetAccountListFor(currentBank))
