@@ -51,7 +51,7 @@ _________________________________________________________________<br><br>
 
 @code
 {
-    Bank currentBank = new Bank("Default Bank", 123456789);
+    Bank currentBank;
 
     // ---- Adding a bank ---
     string bankNameInput = "";
@@ -145,11 +145,12 @@ _________________________________________________________________<br><br>
 @code
 {
     // Previous/next buttons
-    @* protected override void OnInitialized()
+     protected override void OnInitialized()
     {
-        if (BankNames[0] == null)
+        try
         {
-            try
+            currentBank = Bank.bankDictionary[BankNames[0]];
+            @* try
             {
                 // Bank.LoadData();
                 foreach (var kvPair in Bank.bankDictionary)
@@ -178,9 +179,13 @@ _________________________________________________________________<br><br>
             catch
             {
 
-            }
+            } *@
         }
-    } *@
+        catch
+        {
+            currentBank = new Bank("Default Bank", 123456789);
+        }
+    }
 
     void previousBank()
     {
