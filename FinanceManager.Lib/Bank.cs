@@ -6,6 +6,12 @@ namespace PersonalFinanceManager
 
         private Dictionary<long, Account> accountDictionary = new Dictionary<long, Account>();
 
+        public Dictionary<long, Account> AccountDictionary
+        {
+            get => accountDictionary;
+            set => value = accountDictionary;
+        }
+
         public IEnumerable<Account> Accounts => accountDictionary.Select(kvp => kvp.Value);
 
         private string name;
@@ -74,7 +80,7 @@ namespace PersonalFinanceManager
             return GetBankInfo();
         }
 
-       
+
 
         public static Dictionary<long, Account> LoadAcctsFor(Bank thisBank)
         {
@@ -119,11 +125,11 @@ namespace PersonalFinanceManager
 
 
 
-        
+
 
         //---------------DATA STORAGE--------------
 
-        
+
 
         public void ChangeStoredData()
         {
@@ -165,7 +171,7 @@ namespace PersonalFinanceManager
 
         public Bank()
         {
-            // loading from saved data...
+            // for loading from saved data...
 
         }
 

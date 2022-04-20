@@ -121,6 +121,8 @@ namespace PersonalFinanceManager
                     {
                         fs.SetLength(0);
                     }
+                    fs.Flush();
+                    fs.Close();
                 }
             }
 

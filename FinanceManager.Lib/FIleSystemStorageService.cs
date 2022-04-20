@@ -22,28 +22,28 @@ public class FileSystemStorageService : IStorageService
         }
     }
 
-        public void LoadData()
+    public void LoadData()
+    {
+        Bank.bankDictionary = LoadBanks();
+        foreach (var bankKVPair in Bank.bankDictionary)
         {
-            Bank.bankDictionary = LoadBanks();
-            foreach (var bankKVPair in Bank.bankDictionary)
-            {
-                var currentBank = bankKVPair.Value;
-                //Bank.LoadAcctsFor(currentBank);
+            var currentBank = bankKVPair.Value;
+            currentBank.AccountDictionary = Bank.LoadAcctsFor(currentBank);
 
 
-                // foreach (var acctKVPair in currentBank.accountDictionary)
-                // {
-                //     var currentAccount = acctKVPair.Value;
-                //     Account.LoadSubAcctsFor(currentAccount);
-                //     foreach (var subAcctKVPair in currentAccount.SubAccountDictionary)
-                //     {
-                //         var currentSubAccount = subAcctKVPair.Value;
-                //         SubAccount.LoadCustomCategoriesFor(currentSubAccount);
-                //     }
-                // }
-            }
-
+            // foreach (var acctKVPair in currentBank.accountDictionary)
+            // {
+            //     var currentAccount = acctKVPair.Value;
+            //     Account.LoadSubAcctsFor(currentAccount);
+            //     foreach (var subAcctKVPair in currentAccount.SubAccountDictionary)
+            //     {
+            //         var currentSubAccount = subAcctKVPair.Value;
+            //         SubAccount.LoadCustomCategoriesFor(currentSubAccount);
+            //     }
+            // }
         }
+
+    }
 
 
     private void SaveBanks(Dictionary<string, Bank> banks)

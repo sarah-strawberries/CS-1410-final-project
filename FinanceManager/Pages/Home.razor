@@ -27,7 +27,7 @@
     <br><br>
 *@
 <button class="btn btn-primary" @onclick=saveData>Save Data</button><br><br>
-<button class="btn btn-primary" @onclick=Bank.LoadData>Load Data</button><br>
+<button class="btn btn-primary" @onclick=storageService.LoadData>Load Data</button><br>
 
 @code
 {
@@ -42,4 +42,5 @@
     {
         storageService.StoreData(Bank.bankDictionary);
     }
+
 }
