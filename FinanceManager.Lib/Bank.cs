@@ -130,66 +130,7 @@ namespace PersonalFinanceManager
             throw new NotImplementedException();
         }
 
-        public static void LoadData()
-        {
-            bankDictionary = Bank.LoadBanks();
-            foreach (var bankKVPair in bankDictionary)
-            {
-                var currentBank = bankKVPair.Value;
-                Bank.LoadAcctsFor(currentBank);
-                // foreach (var acctKVPair in currentBank.accountDictionary)
-                // {
-                //     var currentAccount = acctKVPair.Value;
-                //     Account.LoadSubAcctsFor(currentAccount);
-                //     foreach (var subAcctKVPair in currentAccount.SubAccountDictionary)
-                //     {
-                //         var currentSubAccount = subAcctKVPair.Value;
-                //         SubAccount.LoadCustomCategoriesFor(currentSubAccount);
-                //     }
-                // }
-            }
 
-        }
-
-        public void DeleteData()
-        {
-            throw new NotImplementedException();
-        }
-
-        public static Dictionary<string, Bank> LoadBanks()
-        {
-            if (File.Exists(@"..\Files\Banks.txt"))
-            {
-                var banks = new Dictionary<string, Bank>();
-                long routingNum = 0;
-                string bankName = "";
-
-                foreach (var line in File.ReadAllLines(@"..\Files\Banks.txt"))
-                {
-                    var parts = line.Split(':');
-                    if (parts[0] == "Bank Name")
-                    {
-                        bankName = parts[1];
-                    }
-
-                    else if (parts[0] == "Routing Number")
-                    {
-                        routingNum = long.Parse(parts[2]);
-                    }
-
-                    else if (parts[0] == "End")
-                    {
-                        Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
-                    }
-                }
-
-                return banks;
-            }
-            else
-            {
-                return new Dictionary<string, Bank>();
-            }
-        }
 
         // --------- CONSTRUCTORS ----------
         public Bank(string bankName, long routingNum)

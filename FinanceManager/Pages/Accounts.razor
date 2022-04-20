@@ -78,6 +78,7 @@ _________________________________________________________________<br><br>
         //}
         bankNameInput = "";
         routingNumInput = 0;
+        ValueNotAllowedException.errorMessage = null;
     }
 
     // --- Adding an account ---
@@ -145,41 +146,44 @@ _________________________________________________________________<br><br>
 @code
 {
     // Previous/next buttons
-     protected override void OnInitialized()
+    protected override void OnInitialized()
     {
+        ValueNotAllowedException.errorMessage = null;
         try
         {
+            foreach (var kvPair in Bank.bankDictionary)
+            {
+                BankNames.Add(kvPair.Value.Name);
+            }
             currentBank = Bank.bankDictionary[BankNames[0]];
             @* try
-            {
+                {
                 // Bank.LoadData();
                 foreach (var kvPair in Bank.bankDictionary)
                 {
-                    BankNames.Add(kvPair.Key);
+                BankNames.Add(kvPair.Key);
                 }
                 if (BankNames.Count >= 1)
                 {
-                    currentBank = Bank.bankDictionary[BankNames[0]];
-                    beginningOfBankNameList = true;
-                    if (BankNames.Count == 1)
-                    {
-                        endOfBankNameList = true;
-                    }
-                    else
-                    {
-                        endOfBankNameList = false;
-                    }
+                currentBank = Bank.bankDictionary[BankNames[0]];
+                beginningOfBankNameList = true;
+                if (BankNames.Count == 1)
+                {
+                endOfBankNameList = true;
                 }
                 else
                 {
-                    beginningOfBankNameList = true;
-                    endOfBankNameList = true;
+                endOfBankNameList = false;
                 }
-            }
-            catch
-            {
-
-            } *@
+                }
+                else
+                {
+                beginningOfBankNameList = true;
+                endOfBankNameList = true;
+                }
+                }
+                catch
+                {} *@
         }
         catch
         {
