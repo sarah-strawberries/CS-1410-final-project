@@ -73,7 +73,6 @@
 
             _______________________<br><br>
 
-
         </div>
 
         <div class="grid-item">
@@ -113,12 +112,15 @@
         try
         {
             Bank newBank = new Bank(bankNameInput, routingNumInput);
+            Bank.bankDictionary.Add(bankNameInput, newBank);
             currentBank = newBank;
+            @* storageService.StoreData(Bank.bankDictionary); *@
         }
         catch (ValueNotAllowedException)
         {
             errorIsResolved = false;
         }
+
         BankNames.Add(currentBank.Name);
         //if (BankNames.Count > 1)
         //{
@@ -126,7 +128,6 @@
         //}
         bankNameInput = "";
         routingNumInput = 0;
-        ValueNotAllowedException.errorMessage = null;
     }
 
     // --- Adding an account ---
@@ -138,8 +139,9 @@
             Bank bank = Bank.bankDictionary[currentBank.Name];
             try
             {
-                bank.AddAccount(new Account(acctNameInput, acctNumInput));
                 ValueNotAllowedException.errorMessage = null;
+                bank.AddAccount(new Account(acctNameInput, acctNumInput));
+                @* storageService.StoreData(Bank.bankDictionary); *@
             }
             catch
             {
