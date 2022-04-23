@@ -1,56 +1,102 @@
 ﻿@using PersonalFinanceManager;
 @page "/accounts"
+
 <head>
-    
+    <style>
+        .grid-container {
+            display: grid;
+            column-gap: 10px;
+            grid-template-columns: auto auto auto;
+            background-color: #22662d;
+            padding: 15px;
+        }
+
+        .grid-item {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            font-size: 14px;
+            text-align: left;
+        }
+    </style>
+
 </head>
-<PageTitle>Account Manager</PageTitle>
 
-<h1>Account Manager</h1>
-_________________________________________________________________<br><br>
+<body>
+    <PageTitle>Account Manager</PageTitle>
+
+    <h1>Account Manager</h1>
+    <br>
+
+    <div class="grid-container">
+        <div class="grid-item">
+
+            @if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
+            {
+                <p>ERROR:@ValueNotAllowedException.errorMessage</p>
+            }
+            <button disabled=@errorIsResolved @onclick=ResetErrorMessage>OK</button><br><br>
+
+            @* <p role="status">Current number of transactions: @currentCount</p>
+
+                <button class="btn btn-primary" @onclick="IncrementCount">Click me to add a transaction to the transaction
+                count! (Or
+                come back later for more functionality)</button> *@
+
+            <h4>Add a bank</h4>
+
+            <label> Bank Name:<br>
+                <input @bind=bankNameInput />
+            </label>
+            <br><br>
+
+            <label> Routing Number: <br>
+                <input @bind=routingNumInput />
+            </label>
+            <br><br>
+
+            <button class="btn btn-primary" @onclick=AddBank>Add Bank</button><br><br>
+            _______________________<br><br>
+
+            <h4>Add an account</h4>
+            <label> Holder name:<br>
+                <input @bind=acctNameInput />
+            </label>
+            <br><br>
+
+            <label> Account number: <br>
+                <input @bind=acctNumInput />
+            </label>
+            <br><br>
+
+            <button class="btn btn-primary" @onclick=addAccount>Add Account</button><br><br>
+
+            _______________________<br><br>
 
 
-@if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
-{
-    <p>ERROR:@ValueNotAllowedException.errorMessage</p>
-}
-<button disabled=@errorIsResolved @onclick=ResetErrorMessage>OK</button><br><br>
+        </div>
 
+        <div class="grid-item">
+            @if (currentBank != null)
+            {
+                <h2>Current Bank: <b>@currentBank.Name</b></h2>
+                <h4>Routing number: @currentBank.RoutingNumber</h4>
+            }
 
-
-@* <p role="status">Current number of transactions: @currentCount</p>
-
-    <button class="btn btn-primary" @onclick="IncrementCount">Click me to add a transaction to the transaction count! (Or
-    come back later for more functionality)</button> *@
-
-<h4>Add a bank</h4>
-<label> Bank Name:<br>
-    <input @bind=bankNameInput />
-</label>
-<br><br>
-
-<label> Routing Number: <br>
-    <input @bind=routingNumInput />
-</label>
-<br><br>
-
-<button class="btn btn-primary" @onclick=AddBank>Add Bank</button><br><br>
-_________________________________________________________________<br><br>
-
-<h4>Add an account</h4>
-<label> Holder name:<br>
-    <input @bind=acctNameInput />
-</label>
-<br><br>
-
-<label> Account number: <br>
-    <input @bind=acctNumInput />
-</label>
-<br><br>
-
-<button class="btn btn-primary" @onclick=addAccount>Add Account</button><br><br>
-
-_________________________________________________________________<br><br>
-
+            @*
+                <button disabled=@beginningOfBankNameList @onclick=previousBank>Previous</button>
+                <button disabled=@endOfBankNameList @onclick=nextBank>Next</button><br><br> *@
+            @if (currentBank != null)
+            {
+                <h3>Accounts in this bank:</h3>
+                @foreach (string acctEntry in Bank.GetAccountListFor(currentBank))
+                {
+                    <p>@acctEntry</p>
+                }
+            }
+        </div>
+    </div>
+</body>
 @code
 {
     Bank currentBank;
@@ -136,67 +182,58 @@ _________________________________________________________________<br><br>
     {
         currentCount++;
     }
-}
-@if (currentBank != null)
-{
-<h2>Current Bank: <b>@currentBank.Name</b></h2>
-<h4>Routing number: @currentBank.RoutingNumber</h4>
-}
 
-@*
-    <button disabled=@beginningOfBankNameList @onclick=previousBank>Previous</button>
-    <button disabled=@endOfBankNameList @onclick=nextBank>Next</button><br><br> *@
-
-
-@code
-{
-
-    FileSystemStorageService storageService;
+    FileSystemStorageService storageService = new FileSystemStorageService();
     // Previous/next buttons
     protected override void OnInitialized()
     {
-        storageService = new FileSystemStorageService();
         storageService.LoadData();
         ValueNotAllowedException.errorMessage = null;
-        try
+        if (Bank.bankDictionary != null)
         {
-            foreach (var kvPair in Bank.bankDictionary)
+            try
             {
-                BankNames.Add(kvPair.Value.Name);
-            }
-            currentBank = Bank.bankDictionary[BankNames[0]];
-            @* try
-                {
-                // Bank.LoadData();
                 foreach (var kvPair in Bank.bankDictionary)
                 {
-                BankNames.Add(kvPair.Key);
+                    BankNames.Add(kvPair.Value.Name);
                 }
-                if (BankNames.Count >= 1)
-                {
                 currentBank = Bank.bankDictionary[BankNames[0]];
-                beginningOfBankNameList = true;
-                if (BankNames.Count == 1)
+                @* try
+                    {
+                    // Bank.LoadData();
+                    foreach (var kvPair in Bank.bankDictionary)
+                    {
+                    BankNames.Add(kvPair.Key);
+                    }
+                    if (BankNames.Count >= 1)
+                    {
+                    currentBank = Bank.bankDictionary[BankNames[0]];
+                    beginningOfBankNameList = true;
+                    if (BankNames.Count == 1)
+                    {
+                    endOfBankNameList = true;
+                    }
+                    else
+                    {
+                    endOfBankNameList = false;
+                    }
+                    }
+                    else
+                    {
+                    beginningOfBankNameList = true;
+                    endOfBankNameList = true;
+                    }
+                    }
+                    catch
+                    {} *@
+            }
+            catch
+            {
+                if (FileSystemStorageService.LoadBanks() == null)
                 {
-                endOfBankNameList = true;
+                    currentBank = new Bank("My Bank", 100000000);
                 }
-                else
-                {
-                endOfBankNameList = false;
-                }
-                }
-                else
-                {
-                beginningOfBankNameList = true;
-                endOfBankNameList = true;
-                }
-                }
-                catch
-                {} *@
-        }
-        catch
-        {
-            currentBank = new Bank("My Bank", 100000000);
+            }
         }
     }
 
@@ -252,13 +289,4 @@ _________________________________________________________________<br><br>
     bool endOfBankNameList;
     int bankNumber = 0;
 
-}
-
-@if (currentBank.Name != null && currentBank.RoutingNumber != 0)
-{
-    <h3>Accounts in this bank:</h3>
-    @foreach (string acctEntry in Bank.GetAccountListFor(currentBank))
-    {
-        <p>@acctEntry</p>
-    }
 }

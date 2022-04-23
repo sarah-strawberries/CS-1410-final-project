@@ -145,7 +145,14 @@ public class FileSystemStorageService : IStorageService
 
                     else if (parts[0] == "End")
                     {
-                        Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
+                        try
+                        {
+                            Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
+                        }
+                        catch
+                        {
+                            // do nothing (go to the next entry)
+                        }
                     }
                 }
 
