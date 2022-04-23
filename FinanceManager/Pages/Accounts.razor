@@ -187,54 +187,50 @@
     // Previous/next buttons
     protected override void OnInitialized()
     {
-        storageService.LoadData();
         ValueNotAllowedException.errorMessage = null;
-        if (Bank.bankDictionary != null)
+
+        storageService.LoadData();
+
+        foreach (var kvPair in Bank.bankDictionary)
         {
-            try
+            BankNames.Add(kvPair.Key);
+        }
+
+        currentBank = Bank.bankDictionary[BankNames[0]];
+        @* try
             {
-                foreach (var kvPair in Bank.bankDictionary)
-                {
-                    BankNames.Add(kvPair.Value.Name);
-                }
-                currentBank = Bank.bankDictionary[BankNames[0]];
-                @* try
-                    {
-                    // Bank.LoadData();
-                    foreach (var kvPair in Bank.bankDictionary)
-                    {
-                    BankNames.Add(kvPair.Key);
-                    }
-                    if (BankNames.Count >= 1)
-                    {
-                    currentBank = Bank.bankDictionary[BankNames[0]];
-                    beginningOfBankNameList = true;
-                    if (BankNames.Count == 1)
-                    {
-                    endOfBankNameList = true;
-                    }
-                    else
-                    {
-                    endOfBankNameList = false;
-                    }
-                    }
-                    else
-                    {
-                    beginningOfBankNameList = true;
-                    endOfBankNameList = true;
-                    }
-                    }
-                    catch
-                    {} *@
+            @* try
+            {
+            // Bank.LoadData();
+            foreach (var kvPair in Bank.bankDictionary)
+            {
+            BankNames.Add(kvPair.Key);
+            }
+            if (BankNames.Count >= 1)
+            {
+            currentBank = Bank.bankDictionary[BankNames[0]];
+            beginningOfBankNameList = true;
+            if (BankNames.Count == 1)
+            {
+            endOfBankNameList = true;
+            }
+            else
+            {
+            endOfBankNameList = false;
+            }
+            }
+            else
+            {
+            beginningOfBankNameList = true;
+            endOfBankNameList = true;
+            }
             }
             catch
+            {}
+            catch
             {
-                if (FileSystemStorageService.LoadBanks() == null)
-                {
-                    currentBank = new Bank("My Bank", 100000000);
-                }
-            }
-        }
+            } *@
+
     }
 
     void previousBank()

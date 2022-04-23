@@ -1,6 +1,3 @@
-Bank Name:My Bank
-Routing Number:100000000
-End:yes
-Bank Name:Test
-Routing Number:123456778
+Bank Name:America First
+Routing Number:123123456
 End:yes

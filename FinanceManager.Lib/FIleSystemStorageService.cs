@@ -24,7 +24,7 @@ public class FileSystemStorageService : IStorageService
 
     public void LoadData()
     {
-        Bank.bankDictionary = LoadBanks();
+        LoadBanks();
         if (Bank.bankDictionary != null)
         {
             foreach (var bankKVPair in Bank.bankDictionary)
@@ -82,25 +82,30 @@ public class FileSystemStorageService : IStorageService
 
     public static void SaveAccountsFor(Bank thisBank)
     {
-        // Note to self:Need to make bool check for unsaved changes
-        // if (thisBank.bankAcctDictHasUnsavedChanges)
-
         if (!(File.Exists($@"..\Files\{thisBank.Name + "Accounts"}.txt")))
         {
             File.Create($@"..\Files\{thisBank.Name + "Accounts"}.txt");
         }
-        //else
+        else
         {
             //Clear contents of file:
-            // using (FileStream fs = File.Open($@"..\Files\{thisBank.Name + "Accounts"}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
-            // {
-            //     lock (fs)
-            //     {
-            //         fs.SetLength(0);
-            //     }
-            //     fs.Flush();
-            //     fs.Close();
-            // }
+            FileStream fileStream = null;
+            try
+            {
+                fileStream = new FileStream($@"..\Files\{thisBank.Name + "Accounts"}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using (TextWriter textWriter = new StreamWriter(fileStream))
+                {
+
+                    fileStream.SetLength(0);
+                }
+            }
+            finally
+            {
+                if (fileStream != null)
+                {
+                    fileStream.Dispose();
+                }
+            }
         }
 
         using StreamWriter fileWriter = new StreamWriter($@"..\Files\{thisBank.Name + "Accounts"}.txt");
@@ -115,18 +120,15 @@ public class FileSystemStorageService : IStorageService
         fileWriter.Flush();
         fileWriter.Close();
 
-        // thisBank.bankAcctDictHasUnsavedChanges = false;
-
-
     }
 
-    public static Dictionary<string, Bank> LoadBanks()
+    public void LoadBanks()
     {
         if (File.Exists(@"..\Files\Banks.txt"))
         {
             if (File.ReadAllLines(@"..\Files\Banks.txt").Length != 0)
             {
-                var banks = new Dictionary<string, Bank>();
+                Dictionary<string, Bank> banks = new Dictionary<string, Bank>();
                 long routingNum = 0;
                 string bankName = "";
 
@@ -145,28 +147,10 @@ public class FileSystemStorageService : IStorageService
 
                     else if (parts[0] == "End")
                     {
-                        try
-                        {
-                            Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
-                        }
-                        catch
-                        {
-                            // do nothing (go to the next entry)
-                        }
+                        Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
                     }
                 }
-
-                return banks;
             }
-            else
-            {
-                return new Dictionary<string, Bank>();
-            }
-        }
-
-        else
-        {
-            return new Dictionary<string, Bank>();
         }
     }
 

@@ -165,9 +165,6 @@ namespace PersonalFinanceManager
             }
 
             routingNumber = routingNum;
-            bankDictionary.Add(bankName, this);
-            // bankDictHasUnsavedChanges = true;
-
         }
 
         public Bank()
