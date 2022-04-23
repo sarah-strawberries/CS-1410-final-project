@@ -1,6 +1,8 @@
 ﻿@using PersonalFinanceManager;
 @page "/accounts"
-
+<head>
+    
+</head>
 <PageTitle>Account Manager</PageTitle>
 
 <h1>Account Manager</h1>
@@ -135,9 +137,12 @@ _________________________________________________________________<br><br>
         currentCount++;
     }
 }
-
+@if (currentBank != null)
+{
 <h2>Current Bank: <b>@currentBank.Name</b></h2>
 <h4>Routing number: @currentBank.RoutingNumber</h4>
+}
+
 @*
     <button disabled=@beginningOfBankNameList @onclick=previousBank>Previous</button>
     <button disabled=@endOfBankNameList @onclick=nextBank>Next</button><br><br> *@
@@ -145,9 +150,13 @@ _________________________________________________________________<br><br>
 
 @code
 {
+
+    FileSystemStorageService storageService;
     // Previous/next buttons
     protected override void OnInitialized()
     {
+        storageService = new FileSystemStorageService();
+        storageService.LoadData();
         ValueNotAllowedException.errorMessage = null;
         try
         {
@@ -187,7 +196,7 @@ _________________________________________________________________<br><br>
         }
         catch
         {
-            currentBank = new Bank("Default Bank", 123456789);
+            currentBank = new Bank("My Bank", 100000000);
         }
     }
 
