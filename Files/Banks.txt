@@ -1,9 +1,6 @@
-Bank Name:Default Bank
-Routing Number:123456789
+Bank Name:My Bank
+Routing Number:100000000
 End:yes
-Bank Name:My NEW bank
-Routing Number:123123123
-End:yes
-Bank Name:yay
-Routing Number:123431456
+Bank Name:Test
+Routing Number:123456778
 End:yes

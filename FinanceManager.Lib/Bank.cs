@@ -86,6 +86,7 @@ namespace PersonalFinanceManager
         {
             if (File.Exists($@"..\Files\{thisBank.Name + "Accounts"}.txt"))
             {
+                // and if the file is not empty...find a way to add that constraint
                 var accounts = new Dictionary<long, Account>();
                 long acctNum = 0;
                 decimal balance = 0M;

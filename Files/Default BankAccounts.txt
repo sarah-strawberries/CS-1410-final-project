@@ -1,4 +1,0 @@
-Account Number:87654322
-Balance:0
-Holder Name:Me
-End:yes

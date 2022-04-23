@@ -25,22 +25,25 @@ public class FileSystemStorageService : IStorageService
     public void LoadData()
     {
         Bank.bankDictionary = LoadBanks();
-        foreach (var bankKVPair in Bank.bankDictionary)
+        if (Bank.bankDictionary != null)
         {
-            var currentBank = bankKVPair.Value;
-            currentBank.AccountDictionary = Bank.LoadAcctsFor(currentBank);
+            foreach (var bankKVPair in Bank.bankDictionary)
+            {
+                var currentBank = bankKVPair.Value;
+                currentBank.AccountDictionary = Bank.LoadAcctsFor(currentBank);
 
 
-            // foreach (var acctKVPair in currentBank.accountDictionary)
-            // {
-            //     var currentAccount = acctKVPair.Value;
-            //     Account.LoadSubAcctsFor(currentAccount);
-            //     foreach (var subAcctKVPair in currentAccount.SubAccountDictionary)
-            //     {
-            //         var currentSubAccount = subAcctKVPair.Value;
-            //         SubAccount.LoadCustomCategoriesFor(currentSubAccount);
-            //     }
-            // }
+                // foreach (var acctKVPair in currentBank.accountDictionary)
+                // {
+                //     var currentAccount = acctKVPair.Value;
+                //     Account.LoadSubAcctsFor(currentAccount);
+                //     foreach (var subAcctKVPair in currentAccount.SubAccountDictionary)
+                //     {
+                //         var currentSubAccount = subAcctKVPair.Value;
+                //         SubAccount.LoadCustomCategoriesFor(currentSubAccount);
+                //     }
+                // }
+            }
         }
 
     }
@@ -86,21 +89,21 @@ public class FileSystemStorageService : IStorageService
         {
             File.Create($@"..\Files\{thisBank.Name + "Accounts"}.txt");
         }
-        else
+        //else
         {
             //Clear contents of file:
-            using (FileStream fs = File.Open($@"..\Files\{thisBank.Name + "Accounts"}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
-            {
-                lock (fs)
-                {
-                    fs.SetLength(0);
-                }
-                fs.Flush();
-                fs.Close();
-            }
+            // using (FileStream fs = File.Open($@"..\Files\{thisBank.Name + "Accounts"}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            // {
+            //     lock (fs)
+            //     {
+            //         fs.SetLength(0);
+            //     }
+            //     fs.Flush();
+            //     fs.Close();
+            // }
         }
 
-        StreamWriter fileWriter = new StreamWriter($@"..\Files\{thisBank.Name + "Accounts"}.txt");
+        using StreamWriter fileWriter = new StreamWriter($@"..\Files\{thisBank.Name + "Accounts"}.txt");
 
         foreach (var account in thisBank.Accounts)
         {
@@ -111,6 +114,7 @@ public class FileSystemStorageService : IStorageService
         }
         fileWriter.Flush();
         fileWriter.Close();
+
         // thisBank.bankAcctDictHasUnsavedChanges = false;
 
 
@@ -120,31 +124,39 @@ public class FileSystemStorageService : IStorageService
     {
         if (File.Exists(@"..\Files\Banks.txt"))
         {
-            var banks = new Dictionary<string, Bank>();
-            long routingNum = 0;
-            string bankName = "";
-
-            foreach (var line in File.ReadAllLines(@"..\Files\Banks.txt"))
+            if (File.ReadAllLines(@"..\Files\Banks.txt").Length != 0)
             {
-                var parts = line.Split(':');
-                if (parts[0] == "Bank Name")
+                var banks = new Dictionary<string, Bank>();
+                long routingNum = 0;
+                string bankName = "";
+
+                foreach (var line in File.ReadAllLines(@"..\Files\Banks.txt"))
                 {
-                    bankName = parts[1];
+                    var parts = line.Split(':');
+                    if (parts[0] == "Bank Name")
+                    {
+                        bankName = parts[1];
+                    }
+
+                    else if (parts[0] == "Routing Number")
+                    {
+                        routingNum = long.Parse(parts[1]);
+                    }
+
+                    else if (parts[0] == "End")
+                    {
+                        Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
+                    }
                 }
 
-                else if (parts[0] == "Routing Number")
-                {
-                    routingNum = long.Parse(parts[2]);
-                }
-
-                else if (parts[0] == "End")
-                {
-                    Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
-                }
+                return banks;
             }
-
-            return banks;
+            else
+            {
+                return new Dictionary<string, Bank>();
+            }
         }
+
         else
         {
             return new Dictionary<string, Bank>();
