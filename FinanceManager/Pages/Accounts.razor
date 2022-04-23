@@ -55,7 +55,7 @@
             </label>
             <br><br>
 
-            <button class="btn btn-primary" @onclick=AddBank>Add Bank</button><br><br>
+            <button class="btn btn-primary" disabled=@bankExists @onclick=AddBank>Add Bank</button><br><br>
             _______________________<br><br>
 
             <h4>Add an account</h4>
@@ -105,6 +105,7 @@
     public int routingNumInput;
     string acctNameInput = "";
     long acctNumInput = 0;
+    bool bankExists = false;
 
     void AddBank()
     {
@@ -114,6 +115,7 @@
             Bank newBank = new Bank(bankNameInput, routingNumInput);
             Bank.bankDictionary.Add(bankNameInput, newBank);
             currentBank = newBank;
+            bankExists = true;
             @* storageService.StoreData(Bank.bankDictionary); *@
         }
         catch (ValueNotAllowedException)
@@ -198,7 +200,11 @@
             BankNames.Add(kvPair.Key);
         }
 
-        currentBank = Bank.bankDictionary[BankNames[0]];
+        if (BankNames != null)
+        {
+            currentBank = Bank.bankDictionary[BankNames[0]];
+            bankExists = true;
+        }
         @* try
             {
             @* try

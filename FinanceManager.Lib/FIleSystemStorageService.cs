@@ -30,7 +30,7 @@ public class FileSystemStorageService : IStorageService
             foreach (var bankKVPair in Bank.bankDictionary)
             {
                 var currentBank = bankKVPair.Value;
-                currentBank.AccountDictionary = Bank.LoadAcctsFor(currentBank);
+                Bank.LoadAcctsFor(currentBank);
 
 
                 // foreach (var acctKVPair in currentBank.accountDictionary)
@@ -82,44 +82,32 @@ public class FileSystemStorageService : IStorageService
 
     public static void SaveAccountsFor(Bank thisBank)
     {
-        if (!(File.Exists($@"..\Files\{thisBank.Name + "Accounts"}.txt")))
+        if (File.Exists($@"..\Files\{thisBank.Name + "Accounts"}.txt"))
         {
-            File.Create($@"..\Files\{thisBank.Name + "Accounts"}.txt");
+            try
+            {
+                StreamWriter fileWriter;
+                fileWriter = new StreamWriter($@"..\Files\{thisBank.Name + "Accounts"}.txt");
+
+                    foreach (var account in thisBank.Accounts)
+                    {
+                        fileWriter.WriteLine("Account Number:" + account.AccountNumber);
+                        fileWriter.WriteLine("Balance:" + account.Balance);
+                        fileWriter.WriteLine("Holder Name:" + account.HolderName);
+                        fileWriter.WriteLine("End:yes");
+                    }
+                    fileWriter.Close();
+            }
+            catch
+            {
+                ValueNotAllowedException.errorMessage = "Oops! Something went wrong.";
+            }
         }
         else
         {
-            //Clear contents of file:
-            FileStream fileStream = null;
-            try
-            {
-                fileStream = new FileStream($@"..\Files\{thisBank.Name + "Accounts"}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                using (TextWriter textWriter = new StreamWriter(fileStream))
-                {
-
-                    fileStream.SetLength(0);
-                }
-            }
-            finally
-            {
-                if (fileStream != null)
-                {
-                    fileStream.Dispose();
-                }
-            }
+            File.Create($@"..\Files\{thisBank.Name + "Accounts"}.txt");
+            SaveAccountsFor(thisBank);
         }
-
-        using StreamWriter fileWriter = new StreamWriter($@"..\Files\{thisBank.Name + "Accounts"}.txt");
-
-        foreach (var account in thisBank.Accounts)
-        {
-            fileWriter.WriteLine("Account Number:" + account.AccountNumber);
-            fileWriter.WriteLine("Balance:" + account.Balance);
-            fileWriter.WriteLine("Holder Name:" + account.HolderName);
-            fileWriter.WriteLine("End:yes");
-        }
-        fileWriter.Flush();
-        fileWriter.Close();
-
     }
 
     public void LoadBanks()
@@ -147,7 +135,14 @@ public class FileSystemStorageService : IStorageService
 
                     else if (parts[0] == "End")
                     {
-                        Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
+                        if (Bank.bankDictionary.ContainsKey(bankName))
+                        {
+                            // don't add it
+                        }
+                        else
+                        {
+                            Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
+                        }
                     }
                 }
             }

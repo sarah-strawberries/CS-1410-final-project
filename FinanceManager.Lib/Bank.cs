@@ -11,7 +11,6 @@ namespace PersonalFinanceManager
             get => accountDictionary;
             set => value = accountDictionary;
         }
-
         public IEnumerable<Account> Accounts => accountDictionary.Select(kvp => kvp.Value);
 
         private string name;
@@ -82,11 +81,10 @@ namespace PersonalFinanceManager
 
 
 
-        public static Dictionary<long, Account> LoadAcctsFor(Bank thisBank)
+        public static void LoadAcctsFor(Bank thisBank)
         {
             if (File.Exists($@"..\Files\{thisBank.Name + "Accounts"}.txt"))
             {
-                // and if the file is not empty...find a way to add that constraint
                 var accounts = new Dictionary<long, Account>();
                 long acctNum = 0;
                 decimal balance = 0M;
@@ -112,15 +110,20 @@ namespace PersonalFinanceManager
 
                     else if (parts[0] == "End")
                     {
-                        thisBank.AddAccount(new Account(acctNum, balance, nameOfHolder));
+                        if (thisBank.accountDictionary.ContainsKey(acctNum))
+                        {
+                            // then don't add it again
+                        }
+                        else
+                        {
+                            thisBank.AddAccount(new Account(acctNum, balance, nameOfHolder));
+                        }
                     }
                 }
-
-                return accounts;
             }
             else
             {
-                return new Dictionary<long, Account>();
+                // nothing to load
             }
         }
 
