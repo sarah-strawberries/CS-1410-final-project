@@ -7,3 +7,4 @@ public interface IStorageService
     // public void ChangeStoredData();
     // public void DeleteData();
 }
+
