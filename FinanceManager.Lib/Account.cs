@@ -45,7 +45,7 @@ namespace PersonalFinanceManager
 
         public void WithdrawalTransaction()
         {
-            if (WithdrawFunds(AmountToWithdraw))
+            if (WithdrawFundsSuccessful(AmountToWithdraw))
             {
                 Bank.UIFeedback = $"Withdrawal of ${AmountToWithdraw} succeeded!";
             }
@@ -55,7 +55,7 @@ namespace PersonalFinanceManager
             }
         }
 
-        public bool WithdrawFunds(decimal amount)
+        public bool WithdrawFundsSuccessful(decimal amount)
         {
             if (Balance - amount < 0)
             {
@@ -181,10 +181,6 @@ namespace PersonalFinanceManager
             }
         }
 
-        // public void AddTransaction(Tuple<string, decimal, DateTime> transaction);
-        // {
-        //     this.transactions.Add(transaction);
-        // }
 
         // -------- CONSTRUCTORS ---------
 

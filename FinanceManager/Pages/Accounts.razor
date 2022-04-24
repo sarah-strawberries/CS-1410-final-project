@@ -5,15 +5,14 @@
     <style>
         .grid-container {
             display: grid;
-            column-gap: 10px;
-            grid-template-columns: auto auto auto;
+            column-gap: 15px;
+            grid-template-columns: auto auto;
             background-color: #22662d;
             padding: 15px;
         }
 
         .grid-item {
             background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.8);
             padding: 20px;
             font-size: 14px;
             text-align: left;
@@ -23,7 +22,7 @@
 </head>
 
 <body>
-    <PageTitle>Account Manager</PageTitle>
+    <PageTitle>Account Manager - Finance Manager</PageTitle>
 
     <h1>Account Manager</h1>
     <br>
@@ -36,27 +35,6 @@
                 <p>ERROR:@ValueNotAllowedException.errorMessage</p>
             }
             <button disabled=@errorIsResolved @onclick=ResetErrorMessage>OK</button><br><br>
-
-            @* <p role="status">Current number of transactions: @currentCount</p>
-
-                <button class="btn btn-primary" @onclick="IncrementCount">Click me to add a transaction to the transaction
-                count! (Or
-                come back later for more functionality)</button> *@
-
-            <h4>Add a bank</h4>
-
-            <label> Bank Name:<br>
-                <input @bind=bankNameInput />
-            </label>
-            <br><br>
-
-            <label> Routing Number: <br>
-                <input @bind=routingNumInput />
-            </label>
-            <br><br>
-
-            <button class="btn btn-primary" disabled=@bankExists @onclick=AddBank>Add Bank</button><br><br>
-            _______________________<br><br>
 
             <h4>Add an account</h4>
             <label> Holder name:<br>
@@ -72,6 +50,22 @@
             <button class="btn btn-primary" @onclick=addAccount>Add Account</button><br><br>
 
             _______________________<br><br>
+            <h4>Add a bank</h4>
+            <h6>*Coming soon*</h6>
+
+            <label> Bank Name:<br>
+                <input @bind=bankNameInput />
+            </label>
+            <br><br>
+
+            <label> Routing Number: <br>
+                <input @bind=routingNumInput />
+            </label>
+            <br><br>
+
+            <button class="btn btn-primary" disabled=@bankExists @onclick=AddBank>Add Bank</button><br><br>
+            _______________________<br><br>
+
 
         </div>
 
@@ -96,6 +90,12 @@
         </div>
     </div>
 </body>
+
+
+
+@* -------------------------------------------CODE------------------------------------------------ *@
+
+
 @code
 {
     Bank currentBank;
@@ -169,7 +169,7 @@
     void AddTransaction(Account thisAccount)
     {
         Tuple<string, decimal, DateTime> transaction = new Tuple<string, decimal, DateTime>(memoInput, amountInput,
-        dateTimeInput);
+        dateTimeInput=DateTime.Today);
     }
 
 

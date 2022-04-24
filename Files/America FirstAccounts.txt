@@ -1,20 +1,8 @@
 Account Number:12345678
 Balance:0
-Holder Name:test
+Holder Name:Sarah
 End:yes
-Account Number:87654321
+Account Number:12332112
 Balance:0
-Holder Name:another test
-End:yes
-Account Number:12345677
-Balance:0
-Holder Name:hi
-End:yes
-Account Number:12344321
-Balance:0
-Holder Name:testing
-End:yes
-Account Number:12332145
-Balance:0
-Holder Name:testing with saving
+Holder Name:Sarah
 End:yes

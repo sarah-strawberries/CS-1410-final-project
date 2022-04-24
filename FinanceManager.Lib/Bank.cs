@@ -110,20 +110,20 @@ namespace PersonalFinanceManager
 
                     else if (parts[0] == "End")
                     {
-                        if (thisBank.accountDictionary.ContainsKey(acctNum))
+                        if (!(thisBank.accountDictionary.ContainsKey(acctNum)))
                         {
-                            // then don't add it again
+                            thisBank.AddAccount(new Account(acctNum, balance, nameOfHolder));
                         }
                         else
                         {
-                            thisBank.AddAccount(new Account(acctNum, balance, nameOfHolder));
+                            // then don't add it again
                         }
                     }
                 }
             }
             else
             {
-                // nothing to load
+                Console.WriteLine("nothing to load");
             }
         }
 

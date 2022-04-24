@@ -1,6 +1,25 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<head>
+    <style>
+        .grid-container {
+            display: grid;
+            column-gap: 10px;
+            grid-template-columns: auto auto;
+            background-color: #22662d;
+            padding: 15px;
+        }
+
+        .grid-item {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            font-size: 14px;
+            text-align: left;
+        }
+    </style>
+
+</head>
+<PageTitle>Home - Finance Manager</PageTitle>
 
 @using PersonalFinanceManager;
 <h1>Home</h1>
@@ -8,21 +27,146 @@
 <b>Welcome to your finance manager!</b>
 <br>
 
+             @if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
+            {
+                <p>ERROR:@ValueNotAllowedException.errorMessage</p>
+            }
+            <button disabled=@errorIsResolved @onclick=resetErrorMessage>OK</button><br><br>
+<body>
+    <div class="grid-container">
+        <div class="grid-item">
 
-@if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
+            <h1>Welcome, @currentAccount.HolderName!</h1>
+
+            Account: @accountNumberView
+
+            <h2>Your balance</h2>
+            <p>@currentAccount.Balance.ToString("c")</p>
+
+            <label> Amount to Withdraw:<br>
+                $<input @bind=amountToWithdraw />
+            </label>
+
+            <br><br>
+
+            <label> Memo: <br>
+                 <input @bind=memoForWithdrawal />
+            </label>
+            <br><br>
+            <button class="btn btn-primary" @onclick=withdrawFunds>Withdraw Funds</button><br><br>
+
+            <br><br>
+
+
+        </div>
+
+        <div class="grid-item">
+            <h3>Recent Transactions</h3>
+        </div>
+    </div>
+</body>
+
+
+@code
 {
-    <p>ERROR: @ValueNotAllowedException.errorMessage</p>
+    List<string> bankNames = new List<string>();
+    List<long> acctNumbers = new List<long>();
+    Bank currentBank;
+    Account? currentAccount;
+    FileSystemStorageService storageService = new FileSystemStorageService();
+    bool errorIsResolved = true;
+
+    void resetErrorMessage()
+    {
+        ValueNotAllowedException.errorMessage = "";
+        errorIsResolved = true;
+    }
+
+    string accountNumberView()
+    {
+        return $"XXXXX{(currentAccount.AccountNumber.ToString()).Substring(4, 4)})";
+    }
+
+    protected override void OnInitialized()
+    {
+        ValueNotAllowedException.errorMessage = null;
+
+        storageService.LoadData();
+
+        foreach (var kvPair in Bank.bankDictionary)
+        {
+            bankNames.Add(kvPair.Key);
+        }
+
+        // note to self: change the following line if re-adding capability of multiple banks
+        currentBank = Bank.bankDictionary[bankNames[0]];
+
+        foreach (var kvPair in currentBank.AccountDictionary)
+        {
+            acctNumbers.Add((long)kvPair.Key);
+        }
+        if (acctNumbers.Count != 0)
+        {
+            currentAccount = currentBank.AccountDictionary[acctNumbers[0]];
+        }
+    }
+
+
+    @* --------Making Transactions------- *@
+
+    decimal amountToWithdraw;
+    string memoForWithdrawal;
+    void withdrawFunds()
+    {          
+        if (currentAccount.WithdrawFundsSuccessful(amountToWithdraw))
+        {
+        // currentAccount.AddTransaction(memoForWithdrawal, amountToWithdraw);
+        }
+        else
+        {
+        ValueNotAllowedException.errorMessage = "Insufficient funds to make specified withdrawal. Please check to make sure you typed the amount correctly.";
+        errorIsResolved = false;
+        }
+        
 }
 
-<br>
-<br>
+    void depositFunds()
+    {
 
-@* <br>
-    Stuff to add on this page:<br><br>
+    }
 
-    - History of recent transactions <br>
-    - Button to add a transaction <br>
-    @* <button class="btn btn-primary" @onclick=WithdrawalTransaction>Withdraw Funds</button><br><br>
+    @* try
+        {
+        @* try
+        {
+        // Bank.LoadData();
+        foreach (var kvPair in Bank.bankDictionary)
+        {
+        BankNames.Add(kvPair.Key);
+        }
+        if (BankNames.Count >= 1)
+        {
+        currentBank = Bank.bankDictionary[BankNames[0]];
+        beginningOfBankNameList = true;
+        if (BankNames.Count == 1)
+        {
+        endOfBankNameList = true;
+        }
+        else
+        {
+        endOfBankNameList = false;
+        }
+        }
+        else
+        {
+        beginningOfBankNameList = true;
+        endOfBankNameList = true;
+        }
+        }
+        catch
+        {}
+        catch
+        {
+        } *@
 
-    <br><br>
-*@
+}
