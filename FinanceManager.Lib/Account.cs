@@ -73,7 +73,7 @@ namespace PersonalFinanceManager
 
         public void DepositFunds(decimal amount)
         {
-            //Balance += amount;
+            Balance += amount;
         }
 
         public SubAccount GetSubAccount(SubAccount.SubAccountTypes account)
