@@ -15,8 +15,6 @@ public class InMemoryStorageService : IStorageService
 
     public void StoreData(Dictionary<string, Bank> banks)
     {
-        throw new System.NotImplementedException();
-
-        //this.banks = banks;
+        this.banks = banks;
     }
 }

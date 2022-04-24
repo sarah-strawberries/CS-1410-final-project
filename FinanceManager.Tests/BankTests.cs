@@ -69,20 +69,9 @@ public partial class SubAccountTests
         public void TestStoreDataForInMemoryStorageService()
         {
             InMemoryStorageService bogusStorageService = new InMemoryStorageService();
-            Dictionary<string, Bank> bogusBankDictionary = new Dictionary<string, Bank>()
-            {
-                {"Test Bank 1", new Bank("Test Bank 1", 123456789)},
-                {"Test Bank 2", new Bank("Test Bank 2", 987654321)}
-            };
-            try
-            {
+            Dictionary<string, Bank> bogusBankDictionary = new Dictionary<string, Bank>();
                 bogusStorageService.StoreData(bogusBankDictionary);
                 Assert.Pass();
-            }
-            catch
-            {
-                Assert.Fail();
-            }
         }
 
         // [Test]
