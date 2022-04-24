@@ -70,9 +70,19 @@ public partial class SubAccountTests
         {
             InMemoryStorageService bogusStorageService = new InMemoryStorageService();
             Dictionary<string, Bank> bogusBankDictionary = new Dictionary<string, Bank>();
-                bogusStorageService.StoreData(bogusBankDictionary);
-                Assert.Pass();
+            bogusStorageService.StoreData(bogusBankDictionary);
+            Assert.Pass();
         }
+
+        [Test]
+        public void TestLoadDataForInMemoryStorageService()
+        {
+            InMemoryStorageService bogusStorageService = new InMemoryStorageService();
+            Dictionary<string, Bank> bogusBankDictionary = new Dictionary<string, Bank>();
+            bogusStorageService.LoadData();
+            Assert.Pass();
+        }
+
 
         // [Test]
         // public void TestGetListOfAccountsInBank()

@@ -10,7 +10,8 @@ public class InMemoryStorageService : IStorageService
 
     public void LoadData()
     {
-        loadedBanks = banks;
+        throw new System.NotImplementedException();
+        // loadedBanks = banks;
     }
 
     public void StoreData(Dictionary<string, Bank> banks)
