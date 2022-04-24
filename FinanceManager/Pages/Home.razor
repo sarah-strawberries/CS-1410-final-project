@@ -27,11 +27,12 @@
 <b>Welcome to your finance manager!</b>
 <br>
 
-             @if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
-            {
-                <p>ERROR:@ValueNotAllowedException.errorMessage</p>
-            }
-            <button disabled=@errorIsResolved @onclick=resetErrorMessage>OK</button><br><br>
+@if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
+{
+    <p>ERROR:@ValueNotAllowedException.errorMessage</p>
+}
+<button disabled=@errorIsResolved @onclick=resetErrorMessage>OK</button><br><br>
+
 <body>
     <div class="grid-container">
         <div class="grid-item">
@@ -50,7 +51,7 @@
             <br><br>
 
             <label> Memo: <br>
-                 <input @bind=memoForWithdrawal />
+                <input @bind=memoForWithdrawal />
             </label>
             <br><br>
             <button class="btn btn-primary" @onclick=withdrawFunds>Withdraw Funds</button><br><br>
@@ -117,18 +118,19 @@
     decimal amountToWithdraw;
     string memoForWithdrawal;
     void withdrawFunds()
-    {          
-        if (currentAccount.WithdrawFundsSuccessful(amountToWithdraw))
+    {
+        try
         {
-        // currentAccount.AddTransaction(memoForWithdrawal, amountToWithdraw);
+            currentAccount.WithdrawFunds(amountToWithdraw);
+            // currentAccount.AddTransaction(memoForWithdrawal, amountToWithdraw);
         }
-        else
+        catch (ValueNotAllowedException)
         {
-        ValueNotAllowedException.errorMessage = "Insufficient funds to make specified withdrawal. Please check to make sure you typed the amount correctly.";
-        errorIsResolved = false;
+            errorIsResolved = false;
         }
-        
-}
+
+
+    }
 
     void depositFunds()
     {

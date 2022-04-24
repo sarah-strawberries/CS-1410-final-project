@@ -43,31 +43,37 @@ namespace PersonalFinanceManager
         private List<Tuple<string, decimal, DateTime>> transactions = new List<Tuple<string, decimal, DateTime>>();
         // ------------ METHODS ------------
 
-        public void WithdrawalTransaction()
-        {
-            if (WithdrawFundsSuccessful(AmountToWithdraw))
-            {
-                Bank.UIFeedback = $"Withdrawal of ${AmountToWithdraw} succeeded!";
-            }
-            else
-            {
-                throw new ValueNotAllowedException("Insufficient funds.");
-            }
-        }
+        //Probably delete this --v
 
-        public bool WithdrawFundsSuccessful(decimal amount)
+        // public void WithdrawalTransaction()
+        // {
+        //     if (WithdrawFunds(AmountToWithdraw))
+        //     {
+        //         Bank.UIFeedback = $"Withdrawal of ${AmountToWithdraw} succeeded!";
+        //     }
+        //     else
+        //     {
+        //         throw new ValueNotAllowedException("Insufficient funds.");
+        //     }
+        // }
+
+
+        public void WithdrawFunds(decimal amount)
         {
             if (Balance - amount < 0)
             {
-                return false;
+                throw new ValueNotAllowedException("Insufficient funds to make specified withdrawal. Please check to make sure you typed the amount correctly.");
             }
-            Balance -= amount;
-            return true;
+            else
+            {
+                Balance -= amount;
+            }
+
         }
 
         public void DepositFunds(decimal amount)
         {
-            Balance += amount;
+            //Balance += amount;
         }
 
         public SubAccount GetSubAccount(SubAccount.SubAccountTypes account)
