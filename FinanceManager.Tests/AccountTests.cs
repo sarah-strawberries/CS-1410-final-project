@@ -43,10 +43,13 @@ public class AccountTests
         Assert.AreEqual(25, testAccount.Balance);
     }
 
-//     [Test]
-//     public void TestMakeWithdrawal()
-//     {
-//         Account testAccount = new Account("Curious George", 12344321);
-//         testAccount.WithdrawFunds();
-//     }
+    [Test]
+    public void TestMakeWithdrawal()
+    {
+        Account testAccount = new Account("Curious George", 12344321);
+        testAccount.DepositFunds(100M);
+        testAccount.WithdrawFunds(75M);
+        
+        Assert.AreEqual(25, testAccount.Balance);
+    }
  }

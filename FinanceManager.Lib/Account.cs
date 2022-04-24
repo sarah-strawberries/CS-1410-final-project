@@ -66,7 +66,7 @@ namespace PersonalFinanceManager
             }
             else
             {
-                Balance -= amount;
+                // Balance -= amount;
             }
 
         }
