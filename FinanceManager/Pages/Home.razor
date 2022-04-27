@@ -29,7 +29,7 @@
 
 @if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
 {
-    <p>ERROR:@ValueNotAllowedException.errorMessage</p>
+    <p style="color:red;"><b>ERROR: </b> @ValueNotAllowedException.errorMessage</p>
 }
 <button disabled=@errorIsResolved @onclick=resetErrorMessage>OK</button><br><br>
 
@@ -38,16 +38,15 @@
         <div class="grid-item">
 
             <h1>Welcome, @currentAccount.HolderName!</h1>
-            @* 
-            Account: @accountNumberView
-             *@
-            <h2>Your balance</h2>
-            <p>@currentAccount.Balance.ToString("c")</p>
+            @*
+                Account: @accountNumberView
+            *@
+            <h2>Your balance: @currentAccount.Balance.ToString("c")</h2>
+            <br>
 
             <label> Amount to Withdraw:<br>
                 $<input @bind=amountToWithdraw />
             </label>
-
             <br><br>
 
             <label> Memo: <br>
@@ -58,6 +57,18 @@
 
             <br><br>
 
+            <label> Amount to Deposit:<br>
+                $<input @bind=amountToDeposit />
+            </label>
+            <br><br>
+
+            <label> Memo: <br>
+                <input @bind=memoForDeposit />
+            </label>
+            <br><br>
+            <button class="btn btn-primary" @onclick=depositFunds>Deposit Funds</button><br><br>
+
+            <br><br>
 
         </div>
 
@@ -117,6 +128,8 @@
 
     decimal amountToWithdraw;
     string memoForWithdrawal;
+      decimal amountToDeposit;
+    string memoForDeposit;
     void withdrawFunds()
     {
         try
@@ -128,13 +141,19 @@
         {
             errorIsResolved = false;
         }
-
-
     }
 
     void depositFunds()
     {
-
+        try
+        {
+            currentAccount.DepositFunds(amountToDeposit);
+            // currentAccount.AddTransaction(memoForDeposit, amountToDeposit);
+        }
+        catch (ValueNotAllowedException)
+        {
+            errorIsResolved = false;
+        }
     }
 
     @* try

@@ -60,20 +60,43 @@ namespace PersonalFinanceManager
 
         public void WithdrawFunds(decimal amount)
         {
-            if (Balance - amount < 0)
+            if (amount > 0)
             {
-                throw new ValueNotAllowedException("Insufficient funds to make specified withdrawal. Please check to make sure you typed the amount correctly.");
+                if (Balance - amount < 0)
+                {
+                    throw new ValueNotAllowedException("Insufficient funds to make specified withdrawal. Please check to make sure you typed the amount correctly.");
+                }
+                else
+                {
+                    Balance -= amount;
+                }
+            }
+            else if (amount == 0)
+            {
+                throw new ValueNotAllowedException("Please enter an amount to withdraw.");
+
             }
             else
             {
-                Balance -= amount;
+                throw new ValueNotAllowedException("You cannot withdraw a negative amount! Try depositing instead.");
             }
 
         }
 
         public void DepositFunds(decimal amount)
         {
-            Balance += amount;
+            if (amount < 0)
+            {
+                throw new ValueNotAllowedException("You cannot deposit a negative amount! Try withdrawing instead.");
+            }
+            else if (amount == 0)
+            {
+                throw new ValueNotAllowedException("Please enter an amount to deposit.");
+            }
+            else
+            {
+                Balance += amount;
+            }
         }
 
         public SubAccount GetSubAccount(SubAccount.SubAccountTypes account)

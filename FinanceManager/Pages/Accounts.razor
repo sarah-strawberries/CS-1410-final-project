@@ -32,7 +32,7 @@
 
             @if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
             {
-                <p>ERROR:@ValueNotAllowedException.errorMessage</p>
+                <p style="color:red;"><b>ERROR: </b> @ValueNotAllowedException.errorMessage</p>
             }
             <button disabled=@errorIsResolved @onclick=ResetErrorMessage>OK</button><br><br>
 
@@ -143,7 +143,7 @@
             {
                 ValueNotAllowedException.errorMessage = null;
                 bank.AddAccount(new Account(acctNameInput, acctNumInput));
-                storageService.StoreData(Bank.bankDictionary); 
+                storageService.StoreData(Bank.bankDictionary);
             }
             catch
             {
@@ -169,7 +169,7 @@
     void AddTransaction(Account thisAccount)
     {
         Tuple<string, decimal, DateTime> transaction = new Tuple<string, decimal, DateTime>(memoInput, amountInput,
-        dateTimeInput=DateTime.Today);
+        dateTimeInput = DateTime.Today);
     }
 
 
