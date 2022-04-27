@@ -58,14 +58,14 @@ namespace PersonalFinanceManager
 
             // if (thisAccount.SubAcctListHasUnsavedChanges)
 
-            if (!(File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt")))
+            if (!(File.Exists($"../Files/{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt")))
             {
-                File.Create($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt");
+                File.Create($"../Files/{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt");
             }
             else
             {
                 //Clear contents of file:
-                using (FileStream fs = File.Open($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                using (FileStream fs = File.Open($"../Files/{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     lock (fs)
                     {
@@ -74,7 +74,7 @@ namespace PersonalFinanceManager
                 }
             }
 
-            StreamWriter fileWriter = new StreamWriter($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt");
+            StreamWriter fileWriter = new StreamWriter($"../Files/{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt");
 
             foreach (KeyValuePair<string, CustomCategory> keyValuePair in thisSubAccount.customCategoryDictionary)
             {
@@ -101,13 +101,13 @@ namespace PersonalFinanceManager
 
         public static Dictionary<string, CustomCategory> LoadCustomCategoriesFor(SubAccount thisSubAccount)
         {
-            if (File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt"))
+            if (File.Exists($"../Files/{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt"))
             {
                 var customCategories = new Dictionary<string, CustomCategory>();
                 string categoryName = "";
                 decimal balance = 0M;
 
-                foreach (var line in File.ReadAllLines($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt"))
+                foreach (var line in File.ReadAllLines($"../Files/{"CustomCategoriesFor" + thisSubAccount.ItemKey}.txt"))
                 {
                     var parts = line.Split(':');
                     if (parts[0] == "Balance")

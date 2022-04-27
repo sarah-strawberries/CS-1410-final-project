@@ -57,7 +57,7 @@ public class FileSystemStorageService : IStorageService
         // {
 
         //Clear contents of file:
-        // using (FileStream fs = File.Open(@"..\Files\Banks.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+        // using (FileStream fs = File.Open("../Files/Banks.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
         // {
         //     lock (fs)
         //     {
@@ -65,7 +65,7 @@ public class FileSystemStorageService : IStorageService
         //     }
         // }
 
-        StreamWriter fileWriter = new StreamWriter(@"..\Files\Banks.txt");
+        StreamWriter fileWriter = new StreamWriter("../Files/Banks.txt");
 
         foreach (KeyValuePair<string, Bank> keyValuePair in banks)
         {
@@ -82,12 +82,12 @@ public class FileSystemStorageService : IStorageService
 
     public static void SaveAccountsFor(Bank thisBank)
     {
-        if (File.Exists($@"..\Files\{thisBank.Name + "Accounts"}.txt"))
+        if (File.Exists($"../Files/{thisBank.Name + "Accounts"}.txt"))
         {
             try
             {
                 StreamWriter fileWriter;
-                fileWriter = new StreamWriter($@"..\Files\{thisBank.Name + "Accounts"}.txt");
+                fileWriter = new StreamWriter($"../Files/{thisBank.Name + "Accounts"}.txt");
 
                     foreach (var account in thisBank.Accounts)
                     {
@@ -105,22 +105,24 @@ public class FileSystemStorageService : IStorageService
         }
         else
         {
-            File.Create($@"..\Files\{thisBank.Name + "Accounts"}.txt");
+            File.Create($"../Files/{thisBank.Name + "Accounts"}.txt");
             SaveAccountsFor(thisBank);
         }
     }
 
     public void LoadBanks()
     {
-        if (File.Exists(@"..\Files\Banks.txt"))
+        if (File.Exists("../Files/Banks.txt"))
         {
-            if (File.ReadAllLines(@"..\Files\Banks.txt").Length != 0)
+            if (File.ReadAllLines("../Files/Banks.txt"
+).Length != 0)
             {
                 Dictionary<string, Bank> banks = new Dictionary<string, Bank>();
                 long routingNum = 0;
                 string bankName = "";
 
-                foreach (var line in File.ReadAllLines(@"..\Files\Banks.txt"))
+                foreach (var line in File.ReadAllLines("../Files/Banks.txt"
+    ))
                 {
                     var parts = line.Split(':');
                     if (parts[0] == "Bank Name")

@@ -137,14 +137,15 @@ namespace PersonalFinanceManager
 
             // if (thisAccount.SubAcctListHasUnsavedChanges)
 
-            if (!(File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.ItemKey}.txt")))
-            {
-                File.Create($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.ItemKey}.txt");
+            if (!(File.Exists($"../Files/{"SubAccountsFor" + thisAccount.ItemKey}.txt")))            
+            { 
+
+                File.Create($"../Files/{"SubAccountsFor" + thisAccount.ItemKey}.txt");
             }
             else
             {
                 //Clear contents of file:
-                using (FileStream fs = File.Open($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"CustomCategoriesFor" + thisAccount.ItemKey}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                using (FileStream fs = File.Open($"../Files/{"SubAccountsFor" + thisAccount.ItemKey}.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     lock (fs)
                     {
@@ -155,7 +156,7 @@ namespace PersonalFinanceManager
                 }
             }
 
-            StreamWriter fileWriter = new StreamWriter($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.ItemKey}.txt");
+            StreamWriter fileWriter = new StreamWriter($"../Files/{"SubAccountsFor" + thisAccount.ItemKey}.txt");
 
             foreach (KeyValuePair<string, SubAccount> keyValuePair in thisAccount.SubAccountDictionary)
             {
@@ -172,14 +173,14 @@ namespace PersonalFinanceManager
 
         public static Dictionary<string, SubAccount> LoadSubAcctsFor(Account thisAccount)
         {
-            if (File.Exists($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.ItemKey}.txt"))
+            if (File.Exists($"../Files/{"SubAccountsFor" + thisAccount.ItemKey}.txt"))
             {
                 var subAccounts = new Dictionary<string, SubAccount>();
                 long subAcctNum = 0;
                 decimal balance = 0M;
                 SubAccount.SubAccountTypes subAcctType = SubAccount.SubAccountTypes.Checking;
 
-                foreach (var line in File.ReadAllLines($@"C:\Users\Allen\code\CS-1410-final-project\Files\{"SubAccountsFor" + thisAccount.ItemKey}.txt"))
+                foreach (var line in File.ReadAllLines($"../Files/{"SubAccountsFor" + thisAccount.ItemKey}.txt"))
                 {
                     var parts = line.Split(':');
                     if (parts[0] == "SubAccount Number")

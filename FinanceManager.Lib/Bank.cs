@@ -79,18 +79,16 @@ namespace PersonalFinanceManager
             return GetBankInfo();
         }
 
-
-
         public static void LoadAcctsFor(Bank thisBank)
         {
-            if (File.Exists($@"..\Files\{thisBank.Name + "Accounts"}.txt"))
+            if (File.Exists($"../Files/{thisBank.Name + "Accounts"}.txt"))
             {
                 var accounts = new Dictionary<long, Account>();
                 long acctNum = 0;
                 decimal balance = 0M;
                 string nameOfHolder = "";
 
-                foreach (var line in File.ReadAllLines($@"..\Files\{thisBank.Name + "Accounts"}.txt"))
+                foreach (var line in File.ReadAllLines($"../Files/{thisBank.Name + "Accounts"}.txt"))
                 {
                     var parts = line.Split(':');
                     if (parts[0] == "Account Number")
