@@ -38,12 +38,17 @@
         <div class="grid-item">
 
             <h1>Welcome, @currentAccount.HolderName!</h1>
-            @*
-                Account: @accountNumberView
-            *@
-            <h2>Your balance: @currentAccount.Balance.ToString("c")</h2>
-            <br>
 
+            <h4 style="color:darkblue;">
+                Account @currentAccount.accountNumberView()
+            </h4>
+            <h2>Your balance: @currentAccount.Balance.ToString("c")</h2>
+            <input @bind=accountToChangeInto /> <button @onclick=ChangeAccount>Change Accounts</button><br>
+            <br> (Type account number above to change to another account)<br>
+            @* <button disabled=@beginningOfBankNameList @onclick=previousBank>Previous</button>
+                <button disabled=@endOfBankNameList @onclick=nextBank>Next</button><br><br> *@
+
+            <hr>
             <label> Amount to Withdraw:<br>
                 $<input @bind=amountToWithdraw />
             </label>
@@ -56,6 +61,7 @@
             <button class="btn btn-primary" @onclick=withdrawFunds>Withdraw Funds</button><br><br>
 
             <br><br>
+            <hr>
 
             <label> Amount to Deposit:<br>
                 $<input @bind=amountToDeposit />
@@ -79,10 +85,19 @@
 </body>
 
 
+
+
+
+
+
 @code
 {
-    List<string> bankNames = new List<string>();
-    List<long> acctNumbers = new List<long>();
+
+    string test()
+    {
+        return $"XXXXXXX{currentAccount.ToString().Substring(4, 4)}";
+    }
+
     Bank currentBank;
     Account? currentAccount;
     FileSystemStorageService storageService = new FileSystemStorageService();
@@ -92,11 +107,6 @@
     {
         ValueNotAllowedException.errorMessage = "";
         errorIsResolved = true;
-    }
-
-    string accountNumberView()
-    {
-        return $"XXXXX{(currentAccount.AccountNumber.ToString()).Substring(4, 4)})";
     }
 
     protected override void OnInitialized()
@@ -128,13 +138,15 @@
 
     decimal amountToWithdraw;
     string memoForWithdrawal;
-      decimal amountToDeposit;
+    decimal amountToDeposit;
     string memoForDeposit;
     void withdrawFunds()
     {
         try
         {
             currentAccount.WithdrawFunds(amountToWithdraw);
+            storageService.StoreData(Bank.bankDictionary);
+
             // currentAccount.AddTransaction(memoForWithdrawal, amountToWithdraw);
         }
         catch (ValueNotAllowedException)
@@ -148,6 +160,7 @@
         try
         {
             currentAccount.DepositFunds(amountToDeposit);
+            storageService.StoreData(Bank.bankDictionary);
             // currentAccount.AddTransaction(memoForDeposit, amountToDeposit);
         }
         catch (ValueNotAllowedException)
@@ -156,20 +169,90 @@
         }
     }
 
-    @* try
+    @* ---------Changing between banks/accounts--------- *@
+    List<string> bankNames = new List<string>();
+    List<long> acctNumbers = new List<long>();
+
+    bool beginningOfBankNameList = true;
+    bool endOfBankNameList = true;
+
+    long accountToChangeInto;
+
+    public void ChangeAccount()
+    {
+        try
         {
-        @* try
+            currentAccount = currentBank.AccountDictionary[accountToChangeInto];
+            accountToChangeInto = 0;
+        }
+        catch
         {
-        // Bank.LoadData();
+            ValueNotAllowedException.errorMessage = "Not a valid account number. Please try again.";
+            errorIsResolved = false;
+        }
+    }
+
+    @* void previousBank()
+        {
+        if (bankNumber > 0)
+        {
+        bankNumber--;
+        currentBank = Bank.bankDictionary[BankNames[bankNumber]];
+
+        if (bankNumber == 0)
+        {
+        beginningOfBankNameList = true;
+        endOfBankNameList = false;
+        }
+        else
+        {
+        beginningOfBankNameList = false;
+        }
+        }
+        }
+
+
+        void nextBank()
+        {
+        if (bankNumber < BankNames.Count - 1 && bankNumber > 0)
+        {
+        bankNumber++;
+        currentBank = Bank.bankDictionary[BankNames[bankNumber]];
+
+        if (bankNumber == BankNames.Count - 1)
+        {
+        endOfBankNameList = true;
+        }
+        else
+        {
+        endOfBankNameList = false;
+        }
+
+        beginningOfBankNameList = false;
+        }
+        else
+        {
+        endOfBankNameList = true;
+        }
+        } *@
+
+    @* public void SelectCurrentBank()
+        {
+
+        try
+        {
+        try
+        {
+        storageService.LoadData();
         foreach (var kvPair in Bank.bankDictionary)
         {
-        BankNames.Add(kvPair.Key);
+        bankNames.Add(kvPair.Key);
         }
-        if (BankNames.Count >= 1)
+        if (bankNames.Count >= 1)
         {
-        currentBank = Bank.bankDictionary[BankNames[0]];
+        currentBank = Bank.bankDictionary[bankNames[0]];
         beginningOfBankNameList = true;
-        if (BankNames.Count == 1)
+        if (bankNames.Count == 1)
         {
         endOfBankNameList = true;
         }
@@ -185,9 +268,56 @@
         }
         }
         catch
-        {}
+        {
+
+        }
+        }
         catch
         {
+
+        }
         } *@
+
+    public void SelectCurrentAcct()
+    {
+
+        try
+        {
+            try
+            {
+                @* storageService.LoadData(); *@
+                foreach (var kvPair in currentBank.AccountDictionary)
+                {
+                    acctNumbers.Add(kvPair.Key);
+                }
+                if (acctNumbers.Count >= 1)
+                {
+                    currentAccount = currentBank.AccountDictionary[acctNumbers[0]];
+                    beginningOfBankNameList = true;
+                    if (bankNames.Count == 1)
+                    {
+                        endOfBankNameList = true;
+                    }
+                    else
+                    {
+                        endOfBankNameList = false;
+                    }
+                }
+                else
+                {
+                    beginningOfBankNameList = true;
+                    endOfBankNameList = true;
+                }
+            }
+            catch
+            {
+                ValueNotAllowedException.errorMessage = "Whoops! Something went wrong with initializing your list of accounts.";
+            }
+        }
+        catch
+        {
+            ValueNotAllowedException.errorMessage = "Oops! Something went wrong with initializing your account list.";
+        }
+    }
 
 }

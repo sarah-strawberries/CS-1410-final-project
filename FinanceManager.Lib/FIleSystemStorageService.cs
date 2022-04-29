@@ -8,7 +8,7 @@ public class FileSystemStorageService : IStorageService
         foreach (var bankKVPair in banks)
         {
             var currentBank = bankKVPair.Value;
-            SaveAccountsFor(currentBank);
+            this.SaveAccountsFor(currentBank);
             // foreach (var acctKVPair in currentBank.accountDictionary)
             // {
             //     var currentAccount = acctKVPair.Value;
@@ -80,7 +80,7 @@ public class FileSystemStorageService : IStorageService
         // }
     }
 
-    public static void SaveAccountsFor(Bank thisBank)
+    public void SaveAccountsFor(Bank thisBank)
     {
         if (File.Exists($"../Files/{thisBank.Name + "Accounts"}.txt"))
         {
@@ -106,7 +106,7 @@ public class FileSystemStorageService : IStorageService
         else
         {
             File.Create($"../Files/{thisBank.Name + "Accounts"}.txt");
-            SaveAccountsFor(thisBank);
+            this.SaveAccountsFor(thisBank);
         }
     }
 

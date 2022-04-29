@@ -99,6 +99,11 @@ namespace PersonalFinanceManager
             }
         }
 
+        public string accountNumberView()
+        {
+            return $"XXXXX{(this.AccountNumber.ToString()).Substring(4, 4)}";
+        }
+
         public SubAccount GetSubAccount(SubAccount.SubAccountTypes account)
         {
             try
@@ -137,8 +142,8 @@ namespace PersonalFinanceManager
 
             // if (thisAccount.SubAcctListHasUnsavedChanges)
 
-            if (!(File.Exists($"../Files/{"SubAccountsFor" + thisAccount.ItemKey}.txt")))            
-            { 
+            if (!(File.Exists($"../Files/{"SubAccountsFor" + thisAccount.ItemKey}.txt")))
+            {
 
                 File.Create($"../Files/{"SubAccountsFor" + thisAccount.ItemKey}.txt");
             }

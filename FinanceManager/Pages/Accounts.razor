@@ -49,7 +49,7 @@
 
             <button class="btn btn-primary" @onclick=addAccount>Add Account</button><br><br>
 
-            _______________________<br><br>
+            <hr>
             <h4>Add a bank</h4>
             <h6>*Coming soon*</h6>
 
@@ -64,7 +64,7 @@
             <br><br>
 
             <button class="btn btn-primary" disabled=@bankExists @onclick=AddBank>Add Bank</button><br><br>
-            _______________________<br><br>
+           <hr>
 
 
         </div>
@@ -241,50 +241,7 @@
 
     }
 
-    void previousBank()
-    {
-        if (bankNumber > 0)
-        {
-            bankNumber--;
-            currentBank = Bank.bankDictionary[BankNames[bankNumber]];
-
-            if (bankNumber == 0)
-            {
-                beginningOfBankNameList = true;
-                endOfBankNameList = false;
-            }
-            else
-            {
-                beginningOfBankNameList = false;
-            }
-        }
-    }
-
-
-    void nextBank()
-    {
-        if (bankNumber < BankNames.Count - 1 && bankNumber > 0)
-        {
-            bankNumber++;
-            currentBank = Bank.bankDictionary[BankNames[bankNumber]];
-
-            if (bankNumber == BankNames.Count - 1)
-            {
-                endOfBankNameList = true;
-            }
-            else
-            {
-                endOfBankNameList = false;
-            }
-
-            beginningOfBankNameList = false;
-        }
-        else
-        {
-            endOfBankNameList = true;
-        }
-    }
-
+    
 
     // Bank List Stuff
 
