@@ -16,7 +16,7 @@ namespace PersonalFinanceManager
         public decimal AmountToWithdraw = 0M;
         public decimal AmountToDeposit = 0M;
 
-        private List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>> transactions;
+        private List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>> transactions = new List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>>();
         public List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>> Transactions { get => transactions; }
 
         private long accountNumber;
