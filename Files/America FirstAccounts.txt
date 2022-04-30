@@ -1,5 +1,5 @@
 Account Number:12345678
-Balance:40
+Balance:18
 Holder Name:Sarah
 End:yes
 Account Number:12332112

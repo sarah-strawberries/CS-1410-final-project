@@ -101,11 +101,11 @@ namespace PersonalFinanceManager
             }
         }
 
-        public void AddTransactionNow(string memo, decimal amount, TransactionMaker.TransactionType type)
+        public void AddLiveTransaction(string memo, decimal amount, TransactionMaker.TransactionType type)
         {
             // adds a transaction using the current date/time as the date/time
             var transaction = new Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>(memo, amount, type, DateTime.Now);
-            this.transactions.Add(transaction);
+            transactions.Add(transaction);
             TransactionMaker.AllTransactions.Add(transaction);
         }
 

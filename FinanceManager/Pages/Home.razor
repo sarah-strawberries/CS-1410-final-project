@@ -80,6 +80,13 @@
 
         <div class="grid-item">
             <h3>Recent Transactions</h3>
+            @*
+                @foreach (var item in currentAccount.Transactions)
+                {
+                <p>@item.ToString()</p>
+                }
+
+            *@
         </div>
     </div>
 </body>
@@ -92,12 +99,6 @@
 
 @code
 {
-
-    string test()
-    {
-        return $"XXXXXXX{currentAccount.ToString().Substring(4, 4)}";
-    }
-
     Bank currentBank;
     Account currentAccount;
     FileSystemStorageService storageService = new FileSystemStorageService();
@@ -146,8 +147,7 @@
         {
             currentAccount.WithdrawFunds(amountToWithdraw);
             storageService.StoreData(Bank.bankDictionary);
-
-            // currentAccount.AddTransaction(memoForWithdrawal, amountToWithdraw);
+            currentAccount.AddLiveTransaction(memoForWithdrawal, amountToWithdraw, TransactionMaker.TransactionType.Withdrawal);
         }
         catch (ValueNotAllowedException)
         {
@@ -161,7 +161,7 @@
         {
             currentAccount.DepositFunds(amountToDeposit);
             storageService.StoreData(Bank.bankDictionary);
-            currentAccount.AddTransactionNow(memoForDeposit, amountToDeposit, TransactionMaker.TransactionType.Deposit);
+            currentAccount.AddLiveTransaction(memoForDeposit, amountToDeposit, TransactionMaker.TransactionType.Deposit);
         }
         catch (ValueNotAllowedException)
         {
