@@ -275,5 +275,10 @@ namespace PersonalFinanceManager
             balance = acctBalance;
         }
 
+        public Account()
+        {
+            // for .json deserialization
+        }
+
     }
 }

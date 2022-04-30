@@ -82,31 +82,29 @@ public class FileSystemStorageService : IStorageService
 
     public void SaveAccountsFor(Bank thisBank)
     {
-        if (File.Exists($"../Files/{thisBank.Name + "Accounts"}.txt"))
+        if (!(thisBank.AccountDictionary == null))
         {
-            try
+            if (File.Exists($"../Files/{thisBank.Name + "Accounts"}.json"))
             {
-                StreamWriter fileWriter;
-                fileWriter = new StreamWriter($"../Files/{thisBank.Name + "Accounts"}.txt");
-
-                    foreach (var account in thisBank.Accounts)
-                    {
-                        fileWriter.WriteLine("Account Number:" + account.AccountNumber);
-                        fileWriter.WriteLine("Balance:" + account.Balance);
-                        fileWriter.WriteLine("Holder Name:" + account.HolderName);
-                        fileWriter.WriteLine("End:yes");
-                    }
-                    fileWriter.Close();
+                try
+                {
+                    var json = System.Text.Json.JsonSerializer.Serialize(thisBank.AccountDictionary);
+                    File.WriteAllText($"../Files/{thisBank.Name + "Accounts"}.json", json);
+                }
+                catch
+                {
+                    ValueNotAllowedException.errorMessage = "Oops! Something went wrong with saving accounts.";
+                }
             }
-            catch
+            else
             {
-                ValueNotAllowedException.errorMessage = "Oops! Something went wrong.";
+                File.Create($"../Files/{thisBank.Name + "Accounts"}.json");
+                this.SaveAccountsFor(thisBank);
             }
         }
         else
         {
-            File.Create($"../Files/{thisBank.Name + "Accounts"}.txt");
-            this.SaveAccountsFor(thisBank);
+            // nothing to save
         }
     }
 

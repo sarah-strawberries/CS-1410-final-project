@@ -81,47 +81,15 @@ namespace PersonalFinanceManager
 
         public static void LoadAcctsFor(Bank thisBank)
         {
-            if (File.Exists($"../Files/{thisBank.Name + "Accounts"}.txt"))
+            if (File.Exists($"../Files/{thisBank.Name + "Accounts"}.json"))
             {
-                var accounts = new Dictionary<long, Account>();
-                long acctNum = 0;
-                decimal balance = 0M;
-                string nameOfHolder = "";
-
-                foreach (var line in File.ReadAllLines($"../Files/{thisBank.Name + "Accounts"}.txt"))
-                {
-                    var parts = line.Split(':');
-                    if (parts[0] == "Account Number")
-                    {
-                        acctNum = long.Parse(parts[1]);
-                    }
-
-                    else if (parts[0] == "Balance")
-                    {
-                        balance = decimal.Parse(parts[1]);
-                    }
-
-                    else if (parts[0] == "Holder Name")
-                    {
-                        nameOfHolder = parts[1];
-                    }
-
-                    else if (parts[0] == "End")
-                    {
-                        if (!(thisBank.accountDictionary.ContainsKey(acctNum)))
-                        {
-                            thisBank.AddAccount(new Account(acctNum, balance, nameOfHolder));
-                        }
-                        else
-                        {
-                            // then don't add it again
-                        }
-                    }
-                }
+                var json = File.ReadAllText($"../Files/{thisBank.Name + "Accounts"}.json");
+                thisBank.accountDictionary =  System.Text.Json.JsonSerializer.Deserialize<Dictionary<long, Account>>(json);
+                
             }
             else
             {
-                Console.WriteLine("nothing to load");
+                // nothing to load
             }
         }
 
