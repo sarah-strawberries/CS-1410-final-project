@@ -16,6 +16,9 @@ namespace PersonalFinanceManager
         public decimal AmountToWithdraw = 0M;
         public decimal AmountToDeposit = 0M;
 
+        private List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>> transactions;
+        public List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>> Transactions { get => transactions; }
+
         private long accountNumber;
         public long AccountNumber => accountNumber;
 
@@ -40,7 +43,6 @@ namespace PersonalFinanceManager
         // public bool SubAcctListHasUnsavedChanges = false;
 
         public Dictionary<string, SubAccount> SubAccountDictionary = new Dictionary<string, SubAccount>();
-        private List<Tuple<string, decimal, DateTime>> transactions = new List<Tuple<string, decimal, DateTime>>();
         // ------------ METHODS ------------
 
         //Probably delete this --v
@@ -97,6 +99,22 @@ namespace PersonalFinanceManager
             {
                 Balance += amount;
             }
+        }
+
+        public void AddTransactionNow(string memo, decimal amount, TransactionMaker.TransactionType type)
+        {
+            // adds a transaction using the current date/time as the date/time
+            var transaction = new Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>(memo, amount, type, DateTime.Now);
+            this.transactions.Add(transaction);
+            TransactionMaker.AllTransactions.Add(transaction);
+        }
+
+        public void AddPastTransaction(string memo, decimal amount, TransactionMaker.TransactionType type, DateTime date)
+        {
+            // adds a transaction with a past date/time as the date/time, using the DateTime given as a parameter
+            var transaction = new Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>(memo, amount, type, date);
+            this.transactions.Add(transaction);
+            TransactionMaker.AllTransactions.Add(transaction); 
         }
 
         public string accountNumberView()

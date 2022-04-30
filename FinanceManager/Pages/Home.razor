@@ -99,7 +99,7 @@
     }
 
     Bank currentBank;
-    Account? currentAccount;
+    Account currentAccount;
     FileSystemStorageService storageService = new FileSystemStorageService();
     bool errorIsResolved = true;
 
@@ -161,7 +161,7 @@
         {
             currentAccount.DepositFunds(amountToDeposit);
             storageService.StoreData(Bank.bankDictionary);
-            // currentAccount.AddTransaction(memoForDeposit, amountToDeposit);
+            currentAccount.AddTransactionNow(memoForDeposit, amountToDeposit, TransactionMaker.TransactionType.Deposit);
         }
         catch (ValueNotAllowedException)
         {
