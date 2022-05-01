@@ -25,9 +25,9 @@ public class FileSystemStorageService : IStorageService
     public void LoadData()
     {
         LoadBanks();
-        if (Bank.bankDictionary != null)
+        if (Bank.BankDictionary != null)
         {
-            foreach (var bankKVPair in Bank.bankDictionary)
+            foreach (var bankKVPair in Bank.BankDictionary)
             {
                 var currentBank = bankKVPair.Value;
                 Bank.LoadAcctsFor(currentBank);
@@ -45,39 +45,28 @@ public class FileSystemStorageService : IStorageService
                 // }
             }
         }
-
     }
 
 
     private void SaveBanks(Dictionary<string, Bank> banks)
     {
-        // Note to self:Need to make bool check for unsaved changes
-
-        // if (bankDictHasUnsavedChanges)
-        // {
-
-        //Clear contents of file:
-        // using (FileStream fs = File.Open("../Files/Banks.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
-        // {
-        //     lock (fs)
-        //     {
-        //         fs.SetLength(0);
-        //     }
-        // }
-
-        StreamWriter fileWriter = new StreamWriter("../Files/Banks.txt");
-
-        foreach (KeyValuePair<string, Bank> keyValuePair in banks)
+        if (File.Exists($"../Files/Banks.json"))
         {
-            fileWriter.WriteLine("Bank Name:" + keyValuePair.Key);
-            fileWriter.WriteLine("Routing Number:" + keyValuePair.Value.RoutingNumber);
-            fileWriter.WriteLine("End:yes");
+            try
+            {
+                var json = System.Text.Json.JsonSerializer.Serialize(Bank.BankDictionary);
+                File.WriteAllText($"../Files/Banks.json", json);
+            }
+            catch
+            {
+                ValueNotAllowedException.errorMessage = "Oops! Something went wrong with saving banks.";
+            }
         }
-        fileWriter.Flush();
-        fileWriter.Close();
-        // bankDictHasUnsavedChanges = false;
-
-        // }
+        else
+        {
+            File.Create($"../Files/Banks.json");
+            this.SaveBanks(Bank.BankDictionary);
+        }
     }
 
     public void SaveAccountsFor(Bank thisBank)
@@ -110,41 +99,12 @@ public class FileSystemStorageService : IStorageService
 
     public void LoadBanks()
     {
-        if (File.Exists("../Files/Banks.txt"))
+        if (File.Exists("../Files/Banks.json"))
         {
-            if (File.ReadAllLines("../Files/Banks.txt"
-).Length != 0)
+            if (File.ReadAllLines("../Files/Banks.json").Length != 0)
             {
-                Dictionary<string, Bank> banks = new Dictionary<string, Bank>();
-                long routingNum = 0;
-                string bankName = "";
-
-                foreach (var line in File.ReadAllLines("../Files/Banks.txt"
-    ))
-                {
-                    var parts = line.Split(':');
-                    if (parts[0] == "Bank Name")
-                    {
-                        bankName = parts[1];
-                    }
-
-                    else if (parts[0] == "Routing Number")
-                    {
-                        routingNum = long.Parse(parts[1]);
-                    }
-
-                    else if (parts[0] == "End")
-                    {
-                        if (Bank.bankDictionary.ContainsKey(bankName))
-                        {
-                            // don't add it
-                        }
-                        else
-                        {
-                            Bank.bankDictionary.Add(bankName, new Bank(bankName, routingNum));
-                        }
-                    }
-                }
+                var json = File.ReadAllText($"../Files/Banks.json");
+                Bank.BankDictionary = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, Bank>>(json);
             }
         }
     }

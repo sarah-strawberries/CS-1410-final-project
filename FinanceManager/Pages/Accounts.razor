@@ -34,7 +34,7 @@
             {
                 <p style="color:red;"><b>ERROR: </b> @ValueNotAllowedException.errorMessage</p>
             }
-            <button disabled=@errorIsResolved @onclick=ResetErrorMessage>OK</button><br><br>
+            <button hidden=@errorIsResolved @onclick=ResetErrorMessage>OK</button><br><br>
 
             <h4>Add an account</h4>
             <label> Holder name:<br>
@@ -76,6 +76,8 @@
                 <h4>Routing number: @currentBank.RoutingNumber</h4>
             }
 
+            <hr>
+
             @*
                 <button disabled=@beginningOfBankNameList @onclick=previousBank>Previous</button>
                 <button disabled=@endOfBankNameList @onclick=nextBank>Next</button><br><br> *@
@@ -113,7 +115,7 @@
         try
         {
             Bank newBank = new Bank(bankNameInput, routingNumInput);
-            Bank.bankDictionary.Add(bankNameInput, newBank);
+            Bank.BankDictionary.Add(bankNameInput, newBank);
             currentBank = newBank;
             bankExists = true;
             @* storageService.StoreData(Bank.bankDictionary); *@
@@ -138,12 +140,12 @@
     {
         try
         {
-            Bank bank = Bank.bankDictionary[currentBank.Name];
+            Bank bank = Bank.BankDictionary[currentBank.Name];
             try
             {
                 ValueNotAllowedException.errorMessage = null;
                 bank.AddAccount(new Account(acctNameInput, acctNumInput));
-                storageService.StoreData(Bank.bankDictionary);
+                storageService.StoreData(Bank.BankDictionary);
             }
             catch
             {
@@ -180,13 +182,6 @@
         errorIsResolved = true;
     }
 
-    private int currentCount = 0;
-
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
-
     FileSystemStorageService storageService = new FileSystemStorageService();
     // Previous/next buttons
     protected override void OnInitialized()
@@ -195,14 +190,14 @@
 
         storageService.LoadData();
 
-        foreach (var kvPair in Bank.bankDictionary)
+        foreach (var kvPair in Bank.BankDictionary)
         {
             BankNames.Add(kvPair.Key);
         }
 
         if (BankNames != null)
         {
-            currentBank = Bank.bankDictionary[BankNames[0]];
+            currentBank = Bank.BankDictionary[BankNames[0]];
             bankExists = true;
         }
         @* try

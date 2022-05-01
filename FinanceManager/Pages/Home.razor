@@ -5,7 +5,7 @@
     <style>
         .grid-container {
             display: grid;
-            column-gap: 10px;
+            column-gap: 20px;
             grid-template-columns: auto auto;
             background-color: #22662d;
             padding: 15px;
@@ -24,14 +24,11 @@
 
 <h1>Home</h1>
 
-<b>Welcome to your finance manager!</b>
-<br>
-
 @if (ValueNotAllowedException.errorMessage != "" && ValueNotAllowedException.errorMessage != null)
 {
     <p style="color:red;"><b>ERROR: </b> @ValueNotAllowedException.errorMessage</p>
 }
-<button disabled=@errorIsResolved @onclick=resetErrorMessage>OK</button><br><br>
+<button hidden=@errorIsResolved @onclick=resetErrorMessage>OK</button><br><br>
 
 <body>
     <div class="grid-container">
@@ -43,8 +40,10 @@
                 Account @currentAccount.accountNumberView()
             </h4>
             <h2>Your balance: @currentAccount.Balance.ToString("c")</h2>
-            <input @bind=accountToChangeInto /> <button @onclick=ChangeAccount>Change Accounts</button><br>
-            <br> (Type account number above to change to another account)<br>
+            <hr>
+            <input @bind=accountToChangeInto />
+            <br> (Type account number above to switch between accounts)<br>
+            <br> <button class="btn btn-primary" @onclick=ChangeAccount>Change Accounts</button><br>
             @* <button disabled=@beginningOfBankNameList @onclick=previousBank>Previous</button>
                 <button disabled=@endOfBankNameList @onclick=nextBank>Next</button><br><br> *@
 
@@ -60,7 +59,6 @@
             <br><br>
             <button class="btn btn-primary" @onclick=withdrawFunds>Withdraw Funds</button><br><br>
 
-            <br><br>
             <hr>
 
             <label> Amount to Deposit:<br>
@@ -92,11 +90,6 @@
 </body>
 
 
-
-
-
-
-
 @code
 {
     Bank currentBank;
@@ -116,13 +109,13 @@
 
         storageService.LoadData();
 
-        foreach (var kvPair in Bank.bankDictionary)
+        foreach (var kvPair in Bank.BankDictionary)
         {
             bankNames.Add(kvPair.Key);
         }
 
         // note to self: change the following line if re-adding capability of multiple banks
-        currentBank = Bank.bankDictionary[bankNames[0]];
+        currentBank = Bank.BankDictionary[bankNames[0]];
 
         foreach (var kvPair in currentBank.AccountDictionary)
         {
@@ -146,8 +139,10 @@
         try
         {
             currentAccount.WithdrawFunds(amountToWithdraw);
-            storageService.StoreData(Bank.bankDictionary);
+            storageService.StoreData(Bank.BankDictionary);
             currentAccount.AddLiveTransaction(memoForWithdrawal, amountToWithdraw, TransactionMaker.TransactionType.Withdrawal);
+            amountToWithdraw = 0;
+            memoForWithdrawal = "";
         }
         catch (ValueNotAllowedException)
         {
@@ -160,8 +155,10 @@
         try
         {
             currentAccount.DepositFunds(amountToDeposit);
-            storageService.StoreData(Bank.bankDictionary);
+            storageService.StoreData(Bank.BankDictionary);
             currentAccount.AddLiveTransaction(memoForDeposit, amountToDeposit, TransactionMaker.TransactionType.Deposit);
+            amountToDeposit = 0;
+            memoForWithdrawal = "";
         }
         catch (ValueNotAllowedException)
         {

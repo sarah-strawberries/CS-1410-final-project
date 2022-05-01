@@ -7,37 +7,43 @@ namespace PersonalFinanceManager
         public virtual decimal Balance
         {
             get => balance;
-            private set
-            {
-                balance = value;
-            }
+            set => balance = value;
         }
 
-        public decimal AmountToWithdraw = 0M;
-        public decimal AmountToDeposit = 0M;
+        public decimal AmountToWithdraw;
+        public decimal AmountToDeposit;
 
         private List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>> transactions = new List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>>();
-        public List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>> Transactions { get => transactions; }
+        public List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>> Transactions { get => transactions; set => transactions = value; }
 
         private long accountNumber;
-        public long AccountNumber => accountNumber;
-
+        public long AccountNumber
+        {
+            get => accountNumber;
+            set => accountNumber = value;
+        }
 
         private string holderName;
         public string HolderName
         {
             get => holderName;
-            // private set
-            // {
+            set => holderName = value;
             //     // if the holder's name should need to be changed...
             //     // add some code to constrain this, otherwise the item key will have to change, too
-            //     HolderName = value;
-            // }
         }
 
-        public string ItemKey => HolderName;
-        private int numberOfSubAccounts = 0;
-        public int NumberOfSubAccounts => numberOfSubAccounts;
+        public string ItemKey
+        {
+            get => HolderName;
+            set => HolderName = value;
+        }
+
+        private int numberOfSubAccounts;
+        public int NumberOfSubAccounts
+        {
+            get => numberOfSubAccounts;
+            set => numberOfSubAccounts = value;
+        }
 
         // /// <summary> Please make me check for unsaved changes! </summary>
         // public bool SubAcctListHasUnsavedChanges = false;
@@ -114,7 +120,7 @@ namespace PersonalFinanceManager
             // adds a transaction with a past date/time as the date/time, using the DateTime given as a parameter
             var transaction = new Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>(memo, amount, type, date);
             this.transactions.Add(transaction);
-            TransactionMaker.AllTransactions.Add(transaction); 
+            TransactionMaker.AllTransactions.Add(transaction);
         }
 
         public string accountNumberView()

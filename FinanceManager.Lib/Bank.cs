@@ -2,7 +2,7 @@ namespace PersonalFinanceManager
 {
     public class Bank
     {
-        public static Dictionary<string, Bank> bankDictionary = new Dictionary<string, Bank>();
+        public static Dictionary<string, Bank> BankDictionary = new Dictionary<string, Bank>();
 
         private Dictionary<long, Account> accountDictionary = new Dictionary<long, Account>();
 
@@ -14,16 +14,14 @@ namespace PersonalFinanceManager
         public IEnumerable<Account> Accounts => accountDictionary.Select(kvp => kvp.Value);
 
         private string name;
+        public string Name { get => name; set => name = value; }
         private long routingNumber;
-        // private bool bankAcctDictHasUnsavedChanges = false;
-        // private static bool bankDictHasUnsavedChanges = false;
-
-        public static string? UIFeedback;
+        public long RoutingNumber { get => routingNumber; set => routingNumber = value; }
 
         private static List<string> stringListOfAccounts;
-        public string Name { get => name; }
-        public long RoutingNumber { get => routingNumber; }
 
+        // private bool bankAcctDictHasUnsavedChanges = false;
+        // private static bool bankDictHasUnsavedChanges = false;
 
         // ---------- METHODS ----------
 
@@ -65,7 +63,7 @@ namespace PersonalFinanceManager
         }
         public static Bank GetBank(string bankName)
         {
-            return Bank.bankDictionary[bankName];
+            return Bank.BankDictionary[bankName];
             // add code to constrain this
         }
 
@@ -84,29 +82,13 @@ namespace PersonalFinanceManager
             if (File.Exists($"../Files/{thisBank.Name + "Accounts"}.json"))
             {
                 var json = File.ReadAllText($"../Files/{thisBank.Name + "Accounts"}.json");
-                thisBank.accountDictionary =  System.Text.Json.JsonSerializer.Deserialize<Dictionary<long, Account>>(json);
-                
+                thisBank.accountDictionary = System.Text.Json.JsonSerializer.Deserialize<Dictionary<long, Account>>(json);
             }
             else
             {
                 // nothing to load
             }
         }
-
-
-
-
-
-        //---------------DATA STORAGE--------------
-
-
-
-        public void ChangeStoredData()
-        {
-            throw new NotImplementedException();
-        }
-
-
 
         // --------- CONSTRUCTORS ----------
         public Bank(string bankName, long routingNum)
@@ -115,11 +97,11 @@ namespace PersonalFinanceManager
             {
                 throw new ValueNotAllowedException("Bank name must not be a blank field and also must contain more than one character.");
             }
-            else if (bankDictionary.ContainsKey(bankName))
+            else if (BankDictionary.ContainsKey(bankName))
             {
                 throw new ValueNotAllowedException("A bank with that name already exists in the system.");
             }
-            foreach (KeyValuePair<string, Bank> kvPair in Bank.bankDictionary)
+            foreach (KeyValuePair<string, Bank> kvPair in Bank.BankDictionary)
             {
                 if (kvPair.Value.RoutingNumber == routingNum)
                 {
@@ -138,8 +120,7 @@ namespace PersonalFinanceManager
 
         public Bank()
         {
-            // for loading from saved data...
-
+            // for loading with json
         }
 
     }
