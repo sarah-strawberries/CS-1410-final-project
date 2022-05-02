@@ -112,7 +112,7 @@ namespace PersonalFinanceManager
             // adds a transaction using the current date/time as the date/time
             var transaction = new Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>(memo, amount, type, DateTime.Now);
             transactions.Add(transaction);
-            TransactionMaker.AllTransactions.Add(transaction);
+            TransactionMaker.AllTransactions.Add(new Tuple<string, decimal, TransactionMaker.TransactionType, DateTime, Account>(memo, amount, type, DateTime.Now, this));
         }
 
         public void AddPastTransaction(string memo, decimal amount, TransactionMaker.TransactionType type, DateTime date)
@@ -120,7 +120,7 @@ namespace PersonalFinanceManager
             // adds a transaction with a past date/time as the date/time, using the DateTime given as a parameter
             var transaction = new Tuple<string, decimal, TransactionMaker.TransactionType, DateTime>(memo, amount, type, date);
             this.transactions.Add(transaction);
-            TransactionMaker.AllTransactions.Add(transaction);
+            TransactionMaker.AllTransactions.Add(new Tuple<string, decimal, TransactionMaker.TransactionType, DateTime, Account>(memo, amount, type, DateTime.Now, this));
         }
 
         public string accountNumberView()

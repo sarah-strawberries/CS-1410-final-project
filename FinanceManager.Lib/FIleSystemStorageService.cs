@@ -20,6 +20,7 @@ public class FileSystemStorageService : IStorageService
             //     }
             // }
         }
+        SaveTransactions();
     }
 
     public void LoadData()
@@ -96,7 +97,22 @@ public class FileSystemStorageService : IStorageService
             // nothing to save
         }
     }
-
+    public void SaveTransactions()
+    {
+        var json = System.Text.Json.JsonSerializer.Serialize(TransactionMaker.AllTransactions);
+        File.WriteAllText($"../Files/Transactions.json", json);
+    }
+    public void LoadTransactions()
+    {
+        if (File.Exists("../Files/Transactions.json"))
+        {
+            if (File.ReadAllLines("../Files.Transactions.json").Length != 0)
+            {
+                var json = File.ReadAllLines("../Files/Transactions.json");
+                TransactionMaker.AllTransactions = System.Text.Json.JsonSerializer.Deserialize<List<Tuple<string, decimal, TransactionMaker.TransactionType, DateTime, Account>>(json);
+            }
+        }
+    }
     public void LoadBanks()
     {
         if (File.Exists("../Files/Banks.json"))

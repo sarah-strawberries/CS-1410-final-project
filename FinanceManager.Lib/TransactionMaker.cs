@@ -6,6 +6,6 @@ public class TransactionMaker
         Withdrawal,
         Deposit
     }
-    public static List<Tuple<string, decimal, TransactionType, DateTime>> AllTransactions =  new List<Tuple<string, decimal, TransactionType, DateTime>>();
+    public static List<Tuple<string, decimal, TransactionType, DateTime, Account>> AllTransactions =  new List<Tuple<string, decimal, TransactionType, DateTime, Account>>();
 
 }

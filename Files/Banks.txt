@@ -1,3 +1,0 @@
-Bank Name:America First
-Routing Number:324377516
-End:yes

@@ -5,7 +5,7 @@
     <style>
         .grid-container {
             display: grid;
-            column-gap: 20px;
+            column-gap: 15px;
             grid-template-columns: auto auto;
             background-color: #22662d;
             padding: 15px;
@@ -42,8 +42,8 @@
             <h2>Your balance: @currentAccount.Balance.ToString("c")</h2>
             <hr>
             <input @bind=accountToChangeInto />
-            <br> (Type account number above to switch between accounts)<br>
-            <br> <button class="btn btn-primary" @onclick=ChangeAccount>Change Accounts</button><br>
+            <button @onclick=ChangeAccount>Change Accounts</button>
+            <br> (Type account number above to switch accounts)<br>
             @* <button disabled=@beginningOfBankNameList @onclick=previousBank>Previous</button>
                 <button disabled=@endOfBankNameList @onclick=nextBank>Next</button><br><br> *@
 
@@ -78,13 +78,39 @@
 
         <div class="grid-item">
             <h3>Recent Transactions</h3>
-            @*
-                @foreach (var item in currentAccount.Transactions)
+            
+                @if (currentAccount.Transactions == null)
                 {
-                <p>@item.ToString()</p>
+                <p><em>No data to show</em></p>
+                }
+                else
+                {
+                <table class="table">
+                <thead>
+                <tr>
+                <th>Memo</th>
+                <th>Transaction Type</th>
+                <th>Amount</th>
+                <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                @foreach (var transaction in currentAccount.Transactions)
+                {
+                <tr>
+                <td>@transaction.Item1</td> 
+                <td>@transaction.Item3</td>
+                <td>@transaction.Item2.ToString("c")</td>
+                <td>@transaction.Item4</td>
+                
+                </tr>
+                }
+                </tbody>
+                </table>
                 }
 
-            *@
+           
         </div>
     </div>
 </body>
@@ -158,7 +184,7 @@
             storageService.StoreData(Bank.BankDictionary);
             currentAccount.AddLiveTransaction(memoForDeposit, amountToDeposit, TransactionMaker.TransactionType.Deposit);
             amountToDeposit = 0;
-            memoForWithdrawal = "";
+            memoForDeposit = "";
         }
         catch (ValueNotAllowedException)
         {

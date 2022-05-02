@@ -1,4 +1,5 @@
-﻿@page "/history"
+﻿@using PersonalFinanceManager
+@page "/history"
 
 <PageTitle>Transaction History - Finance Manager</PageTitle>
 
@@ -7,29 +8,30 @@
 
 <h1>Transaction History</h1>
 
-<p>Here is some example data to represent transaction history.</p>
-
-@if (forecasts == null)
+@if (currentAccount.Transactions == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>No transactions to display.</em></p>
 }
 else
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Amount Spent</th>
                 <th>Memo</th>
+                <th>Transaction Type</th>
+                <th>Amount Spent</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var transaction in currentAccount.Transactions)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>$@forecast.TemperatureC</td>
-                    <td>@forecast.Summary</td>
+                    <td>@transaction.Item1</td>
+                    <td>@transaction.Item3</td>
+                    <td>@transaction.Item2.ToString("c")</td>
+                    <td>@transaction.Item4</td>
+
                 </tr>
             }
         </tbody>
@@ -37,10 +39,33 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
 
-    protected override async Task OnInitializedAsync()
+    Account currentAccount;
+    Bank currentBank;
+    List<string> bankNames = new List<string>();
+    List<long> acctNumbers = new List<long>();
+    FileSystemStorageService storageService = new FileSystemStorageService();
+    protected override void OnInitialized()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+
+        storageService.LoadData();
+
+        foreach (var kvPair in Bank.BankDictionary)
+        {
+            bankNames.Add(kvPair.Key);
+        }
+
+        // note to self: change the following line if re-adding capability of multiple banks
+        currentBank = Bank.BankDictionary[bankNames[0]];
+
+        foreach (var kvPair in currentBank.AccountDictionary)
+        {
+            acctNumbers.Add((long)kvPair.Key);
+        }
+        if (acctNumbers.Count != 0)
+        {
+            currentAccount = currentBank.AccountDictionary[acctNumbers[0]];
+        }
     }
+
 }
